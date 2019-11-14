@@ -1,5 +1,6 @@
 package com.joshgm3z.chatdaemon.common.utils;
 
+import com.joshgm3z.chatdaemon.common.Const;
 import com.joshgm3z.chatdaemon.common.data.Chat;
 import com.joshgm3z.chatdaemon.common.data.User;
 import com.joshgm3z.chatdaemon.common.data.ChatInfo;
@@ -14,19 +15,20 @@ public class ChatInfoBuilder {
     public List<ChatInfo> getChatInfoList(List<Chat> chatList) {
         HashMap<Integer, ChatInfo> chatInfoBuffer = new HashMap<>();
         for (Chat chat : chatList) {
-
-            Logger.log(chat.toString());
-
-            User user = chat.getFromUser() != null ? chat.getFromUser() : chat.getToUser();
-
-            Logger.log("user " + user.toString());
-
+            int chatType;
+            User user;
+            if (chat.getFromUser() != null) {
+                user = chat.getFromUser();
+                chatType = Const.ChatType.RECEIVED;
+            } else {
+                user = chat.getToUser();
+                chatType = Const.ChatType.SENT;
+            }
             ChatInfo chatInfo = new ChatInfo();
             chatInfo.setTitle(user.getName());
             chatInfo.setSubTitle(chat.getMessage());
             chatInfo.setUserId(user.getId());
-
-            Logger.log(chatInfo.toString());
+            chatInfo.setChatType(chatType);
 
             chatInfoBuffer.put(user.getId(), chatInfo);
         }

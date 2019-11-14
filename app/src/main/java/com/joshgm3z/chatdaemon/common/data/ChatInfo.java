@@ -12,15 +12,9 @@ public class ChatInfo {
 
     private int mUserId;
 
-    public ChatInfo() {
-    }
+    private int mChatType;
 
-    public ChatInfo(String title, String subTitle, String dateTime, int status, int userId) {
-        mTitle = title;
-        mSubTitle = subTitle;
-        mDateTime = dateTime;
-        mStatus = status;
-        mUserId = userId;
+    public ChatInfo() {
     }
 
     public int getUserId() {
@@ -35,7 +29,16 @@ public class ChatInfo {
                 ", mDateTime='" + mDateTime + '\'' +
                 ", mStatus=" + mStatus +
                 ", mUserId=" + mUserId +
+                ", mChatType=" + mChatType +
                 '}';
+    }
+
+    public int getChatType() {
+        return mChatType;
+    }
+
+    public void setChatType(int chatType) {
+        mChatType = chatType;
     }
 
     public void setUserId(int userId) {
