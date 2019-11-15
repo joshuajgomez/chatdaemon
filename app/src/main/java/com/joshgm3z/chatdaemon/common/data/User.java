@@ -32,6 +32,9 @@ public class User {
         mId = id;
     }
 
+    public User() {
+    }
+
     public User(int id, String name, String phoneNumber) {
         mId = id;
         mName = name;
