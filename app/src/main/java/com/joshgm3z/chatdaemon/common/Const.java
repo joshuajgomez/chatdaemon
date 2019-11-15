@@ -1,6 +1,6 @@
 package com.joshgm3z.chatdaemon.common;
 
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 
 public class Const {
 

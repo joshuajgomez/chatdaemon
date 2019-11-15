@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "277540548644",
+    "firebase_url": "https://chatdaemon-abd10.firebaseio.com",
+    "project_id": "chatdaemon-abd10",
+    "storage_bucket": "chatdaemon-abd10.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:277540548644:android:c4d603d3278cf7fc0968b1",
+        "android_client_info": {
+          "package_name": "com.joshgm3z.chatdaemon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "277540548644-pt5rn5ms0tthhtq6vqng2vc58fu587oc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDs__NIfqlEqToZjKrp6b--QK9yPnX54gA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "277540548644-pt5rn5ms0tthhtq6vqng2vc58fu587oc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

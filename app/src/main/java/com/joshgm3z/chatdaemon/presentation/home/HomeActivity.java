@@ -1,10 +1,10 @@
 package com.joshgm3z.chatdaemon.presentation.home;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.joshgm3z.chatdaemon.R;
 import com.joshgm3z.chatdaemon.common.data.ChatInfo;
@@ -14,9 +14,13 @@ import com.joshgm3z.chatdaemon.presentation.home.adapter.IHomeAdapterCallback;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeAdapterCallback {
 
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.rv_home_chat_list)
+    RecyclerView mRecyclerView;
 
     private HomeChatAdapter mHomeChatAdapter;
 
@@ -33,7 +37,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
     }
 
     private void initUI() {
-        mRecyclerView = findViewById(R.id.rv_home_chat_list);
+        ButterKnife.bind(this);
 
         mHomeChatAdapter = new HomeChatAdapter(this);
         mRecyclerView.setAdapter(mHomeChatAdapter);

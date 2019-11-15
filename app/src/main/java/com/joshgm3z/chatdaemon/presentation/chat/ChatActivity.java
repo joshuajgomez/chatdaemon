@@ -2,23 +2,27 @@ package com.joshgm3z.chatdaemon.presentation.chat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.joshgm3z.chatdaemon.R;
 import com.joshgm3z.chatdaemon.common.data.Chat;
 import com.joshgm3z.chatdaemon.presentation.chat.adapter.ChatAdapter;
-import com.joshgm3z.chatdaemon.presentation.home.HomeActivity;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ChatActivity extends AppCompatActivity implements IChatView {
 
     private IChatPresenter mChatPresenter;
 
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.rv_chat_list)
+    RecyclerView mRecyclerView;
 
     private ChatAdapter mChatAdapter;
 
@@ -38,7 +42,7 @@ public class ChatActivity extends AppCompatActivity implements IChatView {
     }
 
     private void initUI() {
-        mRecyclerView = findViewById(R.id.rv_chat_list);
+        ButterKnife.bind(this);
         mChatAdapter = new ChatAdapter();
         mRecyclerView.setAdapter(mChatAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
