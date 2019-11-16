@@ -1,5 +1,7 @@
 package com.joshgm3z.chatdaemon.common.data;
 
+import com.joshgm3z.chatdaemon.common.database.entity.User;
+
 public class Chat {
 
     private String mId;

@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.joshgm3z.chatdaemon.R;
-import com.joshgm3z.chatdaemon.common.data.User;
+import com.joshgm3z.chatdaemon.common.database.entity.User;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 import com.joshgm3z.chatdaemon.presentation.home.HomeActivity;
 import com.joshgm3z.chatdaemon.presentation.register.phoneNumber.IRegisterFragmentListener;

@@ -1,18 +1,20 @@
 package com.joshgm3z.chatdaemon.common.utils;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.joshgm3z.chatdaemon.common.Const;
 import com.joshgm3z.chatdaemon.common.data.Chat;
-import com.joshgm3z.chatdaemon.common.data.User;
+import com.joshgm3z.chatdaemon.common.database.AppDatabase;
+import com.joshgm3z.chatdaemon.common.database.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PojoBuilder {
 
-    public static User getUser (DocumentSnapshot documentSnapshot) {
+    public static User getUser(DocumentSnapshot documentSnapshot) {
         User user = null;
         if (documentSnapshot != null) {
             user = new User();
@@ -23,31 +25,40 @@ public class PojoBuilder {
         return user;
     }
 
-    public static List<Chat> getChatList(List<DocumentSnapshot> documents) {
+    public static List<Chat> getChatList(Context context, List<DocumentSnapshot> documents) {
         List<Chat> chatList = new ArrayList<>();
         if (documents != null) {
+            AppDatabase appDatabase = AppDatabase.getInstance(context);
             for (DocumentSnapshot document : documents) {
 
                 String fromUserId = (String) document.get(Const.DbFields.FROM_USER);
                 String toUserId = (String) document.get(Const.DbFields.TO_USER);
 
-                User fromUser = new User();
-                fromUser.setId(fromUserId);
-                fromUser.setName("From Name");
+                User fromUser = null;
+                User toUser = null;
 
-                User toUser = new User();
-                toUser.setId(toUserId);
-                toUser.setName("To Name");
+                if (fromUserId.equals(SharedPrefs.getInstance(context).getUser().getId())) {
+                    Logger.log(Log.INFO, "%%%%%%%%%%%% Sent");
+                    toUser = appDatabase.mUserDao().getUser(toUserId);
+                } else if (toUserId.equals(SharedPrefs.getInstance(context).getUser().getId())) {
+                    Logger.log(Log.INFO, "%%%%%%%%%%%% Received");
+                    fromUser = appDatabase.mUserDao().getUser(fromUserId);
+                } else {
+                    Logger.log(Log.WARN, "%%%%%%%%%%%% Invalid chat: " + document.getData());
+                }
 
-                Chat chat = new Chat();
-                chat.setId(document.getId());
-                String dateTime = (String) document.get(Const.DbFields.DATE_TIME);
-                chat.setTime(Long.parseLong(dateTime));
-                chat.setFromUser(fromUser);
-                chat.setToUser(toUser);
-                chat.setMessage((String) document.get(Const.DbFields.MESSAGE));
-
-                chatList.add(chat);
+                if (fromUser != null || toUser != null) {
+                    Chat chat = new Chat();
+                    chat.setId(document.getId());
+                    String dateTime = (String) document.get(Const.DbFields.DATE_TIME);
+                    chat.setTime(Long.parseLong(dateTime));
+                    chat.setFromUser(fromUser);
+                    chat.setToUser(toUser);
+                    chat.setMessage((String) document.get(Const.DbFields.MESSAGE));
+                    chatList.add(chat);
+                } else {
+                    Logger.log(Log.WARN, "Invalid sender or recipient");
+                }
             }
         } else {
             Logger.log(Log.WARN, "documents is null");

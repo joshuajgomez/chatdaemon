@@ -11,7 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.joshgm3z.chatdaemon.common.Const;
 import com.joshgm3z.chatdaemon.common.DbHandler;
-import com.joshgm3z.chatdaemon.common.data.User;
+import com.joshgm3z.chatdaemon.common.database.entity.User;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 import com.joshgm3z.chatdaemon.common.utils.PojoBuilder;
 

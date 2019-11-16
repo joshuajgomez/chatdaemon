@@ -1,5 +1,6 @@
 package com.joshgm3z.chatdaemon.presentation.home;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,7 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.joshgm3z.chatdaemon.common.Const;
 import com.joshgm3z.chatdaemon.common.data.Chat;
-import com.joshgm3z.chatdaemon.common.data.User;
+import com.joshgm3z.chatdaemon.common.database.entity.User;
 import com.joshgm3z.chatdaemon.common.utils.DummyData;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 import com.joshgm3z.chatdaemon.common.utils.PojoBuilder;
@@ -24,9 +25,12 @@ public class HomeModel implements IHomeModel {
 
     private String mUserId;
 
-    FirebaseFirestore mFirebaseFirestore;
+    private FirebaseFirestore mFirebaseFirestore;
 
-    public HomeModel(IHomePresenter homePresenter, String userId) {
+    private Context mContext;
+
+    public HomeModel(Context context, IHomePresenter homePresenter, String userId) {
+        mContext = context;
         mHomePresenter = homePresenter;
         mUserId = userId;
         mFirebaseFirestore = FirebaseFirestore.getInstance();
@@ -49,7 +53,7 @@ public class HomeModel implements IHomeModel {
                                 // Result received
                                 List<DocumentSnapshot> documents = result.getDocuments();
 
-                                List<Chat> chatList = PojoBuilder.getChatList(documents);
+                                List<Chat> chatList = PojoBuilder.getChatList(mContext, documents);
 
                                 if (!chatList.isEmpty()) {
                                     mHomePresenter.chatListReceived(chatList);

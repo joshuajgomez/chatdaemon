@@ -1,7 +1,7 @@
 package com.joshgm3z.chatdaemon.common.utils;
 
 import com.joshgm3z.chatdaemon.common.data.Chat;
-import com.joshgm3z.chatdaemon.common.data.User;
+import com.joshgm3z.chatdaemon.common.database.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;

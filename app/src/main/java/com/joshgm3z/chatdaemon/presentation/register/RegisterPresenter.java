@@ -3,7 +3,7 @@ package com.joshgm3z.chatdaemon.presentation.register;
 import android.content.Context;
 import android.util.Log;
 
-import com.joshgm3z.chatdaemon.common.data.User;
+import com.joshgm3z.chatdaemon.common.database.entity.User;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 import com.joshgm3z.chatdaemon.common.utils.SharedPrefs;
 

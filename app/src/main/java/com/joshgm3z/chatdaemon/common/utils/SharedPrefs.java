@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.joshgm3z.chatdaemon.common.data.User;
+import com.joshgm3z.chatdaemon.common.database.entity.User;
 
 public class SharedPrefs {
 
@@ -40,6 +40,7 @@ public class SharedPrefs {
         if (mSharedPref.contains(USER_ID)) {
             isUserRegistered = true;
         }
+        Logger.log(Log.INFO, "isUserRegistered = [" + isUserRegistered + "]");
         return isUserRegistered;
     }
 

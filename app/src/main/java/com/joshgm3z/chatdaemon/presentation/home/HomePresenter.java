@@ -5,6 +5,7 @@ import android.util.Log;
 import com.joshgm3z.chatdaemon.common.data.Chat;
 import com.joshgm3z.chatdaemon.common.utils.ChatInfoBuilder;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
+import com.joshgm3z.chatdaemon.service.ContactFetcher;
 
 import java.util.List;
 
@@ -16,9 +17,9 @@ public class HomePresenter implements IHomePresenter {
 
     private ChatInfoBuilder mChatInfoBuilder;
 
-    public HomePresenter(IHomeView homeView, String userId) {
-        mHomeView = homeView;
-        mHomeModel = new HomeModel(this, userId);
+    public HomePresenter(HomeActivity activity, String userId) {
+        mHomeView = activity;
+        mHomeModel = new HomeModel(activity.getApplicationContext(), this, userId);
         mChatInfoBuilder = new ChatInfoBuilder();
     }
 

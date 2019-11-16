@@ -18,6 +18,7 @@ import com.joshgm3z.chatdaemon.presentation.chat.ChatActivity;
 import com.joshgm3z.chatdaemon.presentation.home.adapter.HomeChatAdapter;
 import com.joshgm3z.chatdaemon.presentation.home.adapter.IHomeAdapterCallback;
 import com.joshgm3z.chatdaemon.presentation.register.RegisterActivity;
+import com.joshgm3z.chatdaemon.service.ContactFetcher;
 
 import java.util.List;
 
@@ -38,7 +39,11 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Logger.entryLog();
         setContentView(R.layout.activity_home);
+
+        ContactFetcher contactFetcher = new ContactFetcher(this);
+        contactFetcher.fetch();
 
         checkRegisterStatus();
 
@@ -56,13 +61,17 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
         mHomePresenter = new HomePresenter(this, userId);
 
         initUI();
+        Logger.exitLog();
     }
 
     private void checkRegisterStatus() {
+        Logger.entryLog();
+        Logger.log(Log.INFO, "Checking if user is new");
         if (!SharedPrefs.getInstance(this).isUserRegistered()) {
             ActivityCompat.finishAffinity(this);
             RegisterActivity.startActivity(this);
         }
+        Logger.exitLog();
     }
 
     private void initUI() {

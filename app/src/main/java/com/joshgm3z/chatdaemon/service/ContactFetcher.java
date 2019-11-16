@@ -1,0 +1,119 @@
+package com.joshgm3z.chatdaemon.service;
+
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.Cursor;
+import android.os.AsyncTask;
+import android.provider.ContactsContract;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.joshgm3z.chatdaemon.common.Const;
+import com.joshgm3z.chatdaemon.common.database.AppDatabase;
+import com.joshgm3z.chatdaemon.common.database.dao.UserDao;
+import com.joshgm3z.chatdaemon.common.database.entity.User;
+import com.joshgm3z.chatdaemon.common.utils.Logger;
+import com.joshgm3z.chatdaemon.common.utils.PojoBuilder;
+import com.joshgm3z.chatdaemon.presentation.home.HomeActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ContactFetcher {
+
+    private final Context mContext;
+
+    private ContentResolver mContentResolver;
+
+    private FirebaseFirestore mFirebaseFirestore;
+
+    private List<User> mUserList;
+
+    public ContactFetcher(HomeActivity activity) {
+        mContext = activity.getApplicationContext();
+        mContentResolver = activity.getContentResolver();
+        mFirebaseFirestore = FirebaseFirestore.getInstance();
+    }
+
+    public void fetch() {
+        List<User> userList = new ArrayList<>();
+        Cursor contacts = mContentResolver.query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        while (contacts.moveToNext()) {
+
+            String name = contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            String phoneNumber = contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+            User user = new User();
+            user.setName(name);
+            user.setPhoneNumber(phoneNumber);
+
+            userList.add(user);
+        }
+        contacts.close();
+
+        fetchUserIds(userList);
+    }
+
+    private void fetchUserIds(List<User> userList) {
+        mUserList = new ArrayList<>();
+        for (User user : userList) {
+            fetchUser(user.getPhoneNumber());
+        }
+    }
+
+    private void fetchUser(String phoneNumber) {
+        Logger.log(Log.INFO, "phoneNumber = [" + phoneNumber + "]");
+        mFirebaseFirestore.collection(Const.DbCollections.USERS)
+                .whereEqualTo(Const.DbFields.PHONE_NUMBER, phoneNumber)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            // Task success
+                            QuerySnapshot result = task.getResult();
+                            if (result.size() > 0) {
+                                // Result received
+                                DocumentSnapshot documentSnapshot = result.getDocuments().get(0);
+                                Logger.log(Log.INFO, "documentSnapshot.getData() = [" + documentSnapshot.getData() + "]");
+                                User user = PojoBuilder.getUser(documentSnapshot);
+                                mUserList.add(user);
+                                addUser(user);
+                            } else {
+                                // No chat found
+                                Logger.log(Log.WARN, "No chat found: result is empty");
+                            }
+                        } else {
+                            // Task failed
+                            Logger.exceptionLog(task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void addUser(User user) {
+        Logger.log(Log.INFO, "user = [" + user + "]");
+        new AsyncTask<User, Void, Void>() {
+            @Override
+            protected Void doInBackground(User... users) {
+                User user = users[0];
+                UserDao userDao = AppDatabase.getInstance(mContext).mUserDao();
+                if (userDao.getUser(user.getId()) != null) {
+                    Logger.log(Log.INFO, "User already added");
+                } else {
+                    userDao.addUser(user);
+                }
+                return null;
+            }
+        }.execute(user);
+    }
+
+
+}

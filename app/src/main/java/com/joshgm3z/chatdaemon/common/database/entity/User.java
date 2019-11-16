@@ -1,12 +1,34 @@
-package com.joshgm3z.chatdaemon.common.data;
+package com.joshgm3z.chatdaemon.common.database.entity;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import com.joshgm3z.chatdaemon.common.Const;
+
+@Entity
 public class User {
 
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = Const.DbFields.ID)
     private String mId;
 
+    @ColumnInfo(name = Const.DbFields.NAME)
     private String mName;
 
+    @ColumnInfo(name = Const.DbFields.PHONE_NUMBER)
     private String mPhoneNumber;
+
+    public User() {
+    }
+
+    public User(String id, String name, String phoneNumber) {
+        mId = id;
+        mName = name;
+        mPhoneNumber = phoneNumber;
+    }
 
     public String getName() {
         return mName;
@@ -32,15 +54,6 @@ public class User {
         mId = id;
     }
 
-    public User() {
-    }
-
-    public User(String id, String name, String phoneNumber) {
-        mId = id;
-        mName = name;
-        mPhoneNumber = phoneNumber;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -50,3 +63,4 @@ public class User {
                 '}';
     }
 }
+

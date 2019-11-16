@@ -1,9 +1,11 @@
 package com.joshgm3z.chatdaemon.common.utils;
 
+import android.util.Log;
+
 import com.joshgm3z.chatdaemon.common.Const;
 import com.joshgm3z.chatdaemon.common.data.Chat;
-import com.joshgm3z.chatdaemon.common.data.User;
 import com.joshgm3z.chatdaemon.common.data.ChatInfo;
+import com.joshgm3z.chatdaemon.common.database.entity.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,12 +20,15 @@ public class ChatInfoBuilder {
             int chatType;
             User user;
             if (chat.getFromUser() != null) {
+                Logger.log(Log.INFO, "%%%%%%%%%%%% Received");
                 user = chat.getFromUser();
                 chatType = Const.ChatType.RECEIVED;
             } else {
+                Logger.log(Log.INFO, "%%%%%%%%%%%% Sent");
                 user = chat.getToUser();
                 chatType = Const.ChatType.SENT;
             }
+            Logger.log(Log.INFO, "%%%%%%%%%%%% user = [" + user + "]");
             ChatInfo chatInfo = new ChatInfo();
             chatInfo.setTitle(user.getName());
             chatInfo.setSubTitle(chat.getMessage());
