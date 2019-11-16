@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface IHomeModel {
 
-    List<Chat> getChatList();
+    void getChatList();
 
 }

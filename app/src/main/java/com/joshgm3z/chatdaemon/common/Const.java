@@ -21,6 +21,13 @@ public class Const {
     public @interface DbFields {
         String NAME = "name";
         String PHONE_NUMBER = "phonenumber";
+        String ID = "id";
+
+        String FROM_USER = "fromuser";
+        String TO_USER = "touser";
+
+        String DATE_TIME = "datetime";
+        String MESSAGE = "message";
     }
 
 }

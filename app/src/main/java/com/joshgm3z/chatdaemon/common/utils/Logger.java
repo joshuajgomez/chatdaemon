@@ -11,7 +11,7 @@ public class Logger {
         String className = element.getClassName();
         className = className.substring(className.lastIndexOf(".") + 1, className.length());
         String methodName = element.getMethodName();
-        Log.i(TAG + className, methodName + " >>> Entry");
+        Log.v(TAG + className, methodName + " >>> Entry");
     }
 
     public static void exitLog() {
@@ -19,7 +19,7 @@ public class Logger {
         String className = element.getClassName();
         className = className.substring(className.lastIndexOf(".") + 1, className.length());
         String methodName = element.getMethodName();
-        Log.i(TAG + className, methodName + " <<< Exit");
+        Log.v(TAG + className, methodName + " <<< Exit");
     }
 
     public static void log(String message) {
@@ -35,7 +35,7 @@ public class Logger {
         String className = element.getClassName();
         className = className.substring(className.lastIndexOf(".") + 1, className.length());
         String methodName = element.getMethodName();
-        Log.println(logPriority, TAG + className + methodName, message);
+        Log.println(logPriority, TAG + className + "#" + methodName, message);
     }
 
     public static void log(int logPriority, String tag, String message) {
@@ -43,7 +43,7 @@ public class Logger {
         String className = element.getClassName();
         className = className.substring(className.lastIndexOf(".") + 1, className.length());
         String methodName = element.getMethodName();
-        Log.println(logPriority, TAG + className + methodName + " : " + tag, message);
+        Log.println(logPriority, TAG + className + "#" + methodName + " : " + tag, message);
     }
 
     public static void exceptionLog(Exception e) {

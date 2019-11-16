@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface IChatModel {
 
-    List<Chat> getChatList(int userId);
+    List<Chat> getChatList(String userId);
 
 }

@@ -10,14 +10,14 @@ public class ChatInfo {
 
     private int mStatus;
 
-    private int mUserId;
+    private String mUserId;
 
     private int mChatType;
 
     public ChatInfo() {
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return mUserId;
     }
 
@@ -41,7 +41,7 @@ public class ChatInfo {
         mChatType = chatType;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         mUserId = userId;
     }
 

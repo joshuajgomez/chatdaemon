@@ -34,7 +34,7 @@ public class ChatActivity extends AppCompatActivity implements IChatView {
         setContentView(R.layout.activity_chat);
 
         Intent intent = getIntent();
-        int userId = intent.getIntExtra(USER_ID, -1);
+        String userId = intent.getStringExtra(USER_ID);
 
         mChatPresenter = new ChatPresenter(this, userId);
 
@@ -55,7 +55,7 @@ public class ChatActivity extends AppCompatActivity implements IChatView {
     }
 
 
-    public static void startActivity(Context context, int userId){
+    public static void startActivity(Context context, String userId){
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(USER_ID, userId);
         context.startActivity(intent);

@@ -13,7 +13,7 @@ import java.util.Set;
 public class ChatInfoBuilder {
 
     public List<ChatInfo> getChatInfoList(List<Chat> chatList) {
-        HashMap<Integer, ChatInfo> chatInfoBuffer = new HashMap<>();
+        HashMap<String, ChatInfo> chatInfoBuffer = new HashMap<>();
         for (Chat chat : chatList) {
             int chatType;
             User user;
@@ -40,10 +40,10 @@ public class ChatInfoBuilder {
         return chatInfoList;
     }
 
-    private List<ChatInfo> getList(HashMap<Integer, ChatInfo> chatInfoBuffer) {
+    private List<ChatInfo> getList(HashMap<String, ChatInfo> chatInfoBuffer) {
         List<ChatInfo> chatInfoList = new ArrayList<>();
-        Set<Integer> idList = chatInfoBuffer.keySet();
-        for (Integer id : idList) {
+        Set<String> idList = chatInfoBuffer.keySet();
+        for (String id : idList) {
             chatInfoList.add(chatInfoBuffer.get(id));
         }
         return chatInfoList;

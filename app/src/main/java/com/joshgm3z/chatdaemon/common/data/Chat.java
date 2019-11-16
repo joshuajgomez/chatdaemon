@@ -2,7 +2,7 @@ package com.joshgm3z.chatdaemon.common.data;
 
 public class Chat {
 
-    private int mId;
+    private String mId;
 
     private User mFromUser;
 
@@ -12,7 +12,10 @@ public class Chat {
 
     private String mMessage;
 
-    public Chat(int id, User fromUser, User toUser, long time, String message) {
+    public Chat() {
+    }
+
+    public Chat(String id, User fromUser, User toUser, long time, String message) {
         mId = id;
         mFromUser = fromUser;
         mToUser = toUser;
@@ -20,11 +23,11 @@ public class Chat {
         mMessage = message;
     }
 
-    public int getId() {
+    public String getId() {
         return mId;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         mId = id;
     }
 

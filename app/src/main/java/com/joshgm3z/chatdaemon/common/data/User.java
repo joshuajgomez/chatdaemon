@@ -2,7 +2,7 @@ package com.joshgm3z.chatdaemon.common.data;
 
 public class User {
 
-    private int mId;
+    private String mId;
 
     private String mName;
 
@@ -24,18 +24,18 @@ public class User {
         mPhoneNumber = phoneNumber;
     }
 
-    public int getId() {
+    public String getId() {
         return mId;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         mId = id;
     }
 
     public User() {
     }
 
-    public User(int id, String name, String phoneNumber) {
+    public User(String id, String name, String phoneNumber) {
         mId = id;
         mName = name;
         mPhoneNumber = phoneNumber;

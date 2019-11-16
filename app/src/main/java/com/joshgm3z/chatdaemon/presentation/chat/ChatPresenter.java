@@ -10,9 +10,9 @@ public class ChatPresenter implements IChatPresenter {
 
     private IChatModel mChatModel;
 
-    private int mUserId;
+    private String mUserId;
 
-    public ChatPresenter(IChatView chatView, int userId) {
+    public ChatPresenter(IChatView chatView, String userId) {
         mChatView = chatView;
         mChatModel = new ChatModel(this);
         mUserId = userId;

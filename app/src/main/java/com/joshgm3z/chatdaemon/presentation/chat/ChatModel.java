@@ -14,7 +14,7 @@ public class ChatModel implements IChatModel {
     }
 
     @Override
-    public List<Chat> getChatList(int userId) {
+    public List<Chat> getChatList(String userId) {
         return new DummyData().getChatList(userId);
     }
 }
