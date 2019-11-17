@@ -48,9 +48,8 @@ public class HomeModel implements IHomeModel, EventListener<QuerySnapshot> {
     public void listenForMessages() {
         CollectionReference collection = mFirebaseFirestore.collection(Const.DbCollections.CHATS);
         collection.whereEqualTo(Const.DbFields.FROM_USER, mUserId);
-        Query query = collection.whereEqualTo(Const.DbFields.FROM_USER, mUserId);
-        query.orderBy(Const.DbFields.DATE_TIME);
-        query.addSnapshotListener(this);
+        collection.whereEqualTo(Const.DbFields.TO_USER, mUserId);
+        collection.addSnapshotListener(this);
     }
 
 
@@ -61,7 +60,6 @@ public class HomeModel implements IHomeModel, EventListener<QuerySnapshot> {
             return;
         }
         List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
-
         List<Chat> chatList = PojoBuilder.getChatList(mContext, documents);
         Logger.log(Log.INFO, "chatList update = [" + chatList + "]");
         mHomePresenter.chatListReceived(chatList);

@@ -29,7 +29,7 @@ public class ChatPresenter implements IChatPresenter {
 
     @Override
     public void chatListReceived(List<Chat> chatList) {
-        mChatView.updateData(PojoBuilder.getDateSortedChatList(chatList));
+        mChatView.updateData(chatList);
     }
 
     @Override

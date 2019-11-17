@@ -28,7 +28,7 @@ public class PojoBuilder {
     }
 
     public static List<Chat> getChatList(Context context, List<DocumentSnapshot> documents) {
-        List<Chat> chatList = new ArrayList<>();
+        ArrayList<Chat> chatList = new ArrayList<>();
         if (documents != null) {
             AppDatabase appDatabase = AppDatabase.getInstance(context);
             for (DocumentSnapshot document : documents) {
@@ -67,12 +67,16 @@ public class PojoBuilder {
     }
 
     public static List<Chat> getDateSortedChatList(List<Chat> chatList) {
-        Collections.sort(chatList, new Comparator<Chat>() {
+        Logger.entryLog();
+        Logger.log(Log.INFO, "chatList before = [" + chatList + "]");
+        chatList.sort(new Comparator<Chat>() {
             @Override
             public int compare(Chat chat1, Chat chat2) {
-                return chat1.getTime() < chat2.getTime() ? 1 : 0;
+                return chat1.getTime().compareTo(chat2.getTime());
             }
         });
+        Logger.log(Log.INFO, "chatList _after = [" + chatList + "]");
+        Logger.exitLog();
         return chatList;
     }
 }

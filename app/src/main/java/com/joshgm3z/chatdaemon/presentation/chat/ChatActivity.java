@@ -66,7 +66,7 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
     public void updateData(List<Chat> chatList) {
         Logger.log(Log.INFO, "chatList.size = [" + chatList.size() + "]");
         mChatAdapter.setChatList(chatList);
-        mRecyclerView.scrollToPosition(chatList.size());
+        mRecyclerView.scrollToPosition(chatList.size()-1);
     }
 
 

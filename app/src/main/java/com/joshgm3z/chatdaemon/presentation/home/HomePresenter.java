@@ -33,7 +33,6 @@ public class HomePresenter implements IHomePresenter {
     public void chatListReceived(List<Chat> chatList) {
         Logger.entryLog();
         Logger.log(Log.INFO, "chatList.size = [" + chatList.size() + "]");
-        chatList = PojoBuilder.getDateSortedChatList(chatList);
         mHomeView.updateChatList(mChatInfoBuilder.getChatInfoList(chatList));
         Logger.exitLog();
     }

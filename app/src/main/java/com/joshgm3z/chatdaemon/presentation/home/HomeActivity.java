@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -96,6 +97,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
 
     @Override
     public void updateChatList(List<ChatInfo> chatInfoList) {
+        Toast.makeText(this, "Chat updated", Toast.LENGTH_SHORT).show();
         mHomeChatAdapter.setChatInfoList(chatInfoList);
     }
 

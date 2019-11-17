@@ -10,14 +10,14 @@ public class Chat {
 
     private User mToUser;
 
-    private long mTime;
+    private Long mTime;
 
     private String mMessage;
 
     public Chat() {
     }
 
-    public Chat(String id, User fromUser, User toUser, long time, String message) {
+    public Chat(String id, User fromUser, User toUser, Long time, String message) {
         mId = id;
         mFromUser = fromUser;
         mToUser = toUser;
@@ -49,11 +49,11 @@ public class Chat {
         mToUser = toUser;
     }
 
-    public long getTime() {
+    public Long getTime() {
         return mTime;
     }
 
-    public void setTime(long time) {
+    public void setTime(Long time) {
         mTime = time;
     }
 
