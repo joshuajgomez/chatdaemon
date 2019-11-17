@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.joshgm3z.chatdaemon.R;
 import com.joshgm3z.chatdaemon.common.data.ChatInfo;
+import com.joshgm3z.chatdaemon.common.utils.DateUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,6 +20,9 @@ public class HomeChatViewHolder extends RecyclerView.ViewHolder implements View.
 
     @BindView(R.id.tv_subtitle)
     TextView mSubtitle;
+
+    @BindView(R.id.tv_date_time)
+    TextView mDateTime;
 
     private IHomeAdapterCallback mAdapterCallback;
 
@@ -35,6 +39,7 @@ public class HomeChatViewHolder extends RecyclerView.ViewHolder implements View.
         mChatInfo = chatInfo;
         mTitle.setText(chatInfo.getTitle());
         mSubtitle.setText(chatInfo.getSubTitle());
+        mDateTime.setText(DateUtil.getPrettyTime(chatInfo.getDateTime()));
     }
 
     @Override

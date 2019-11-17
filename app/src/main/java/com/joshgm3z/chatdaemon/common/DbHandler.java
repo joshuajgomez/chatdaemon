@@ -1,6 +1,7 @@
 package com.joshgm3z.chatdaemon.common;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -13,6 +14,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.joshgm3z.chatdaemon.common.data.Chat;
 import com.joshgm3z.chatdaemon.common.database.entity.User;
 import com.joshgm3z.chatdaemon.common.utils.FirebaseLogger;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
@@ -66,41 +68,33 @@ public class DbHandler {
         Logger.exitLog();
     }
 
-    public String checkUser(String phoneNumber, IDbHandlerCallback callback) {
-        final String[] userIdList = {""};
-        mFirebaseFirestore.collection(Const.DbCollections.USERS)
-                .whereEqualTo(Const.DbFields.PHONE_NUMBER, phoneNumber)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void sendMessage(Chat chat) {
+        Logger.entryLog();
+        Logger.log(Log.INFO, "chat = [" + chat + "]");
+        Map<String, Object> chatMap = new HashMap<>();
+        chatMap.put(Const.DbFields.DATE_TIME, chat.getTime());
+        chatMap.put(Const.DbFields.FROM_USER, chat.getFromUser().getId());
+        chatMap.put(Const.DbFields.TO_USER, chat.getToUser().getId());
+        chatMap.put(Const.DbFields.MESSAGE, chat.getMessage());
+
+        // Add a new document with a generated ID
+        mFirebaseFirestore.collection(Const.DbCollections.CHATS)
+                .add(chatMap)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            // Task success
-                            QuerySnapshot result = task.getResult();
-                            if (result.size() > 0) {
-                                // User registered
-                                Map<String, Object> data = result.getDocuments().get(0).getData();
-                                Logger.log("Registered user: " + data.toString());
-                                userIdList[0] = data.get(Const.DbFields.ID).toString();
-                            } else {
-                                // New user
-                                Logger.log("New user");
-                            }
-                        } else {
-                            // Task failed
-                            Logger.exceptionLog(task.getException());
-                        }
+                    public void onSuccess(DocumentReference documentReference) {
+                        Logger.log("Message sent: " + documentReference.getId());
+                        FirebaseLogger.getInstance(mContext).log("Message sent: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Logger.log("Error sending message: " + e.getCause().getMessage());
+                        FirebaseLogger.getInstance(mContext).log("Error sending message: " + e.getCause().getMessage());
                     }
                 });
-        String userId = !userIdList[0].isEmpty() ? userIdList[0] : null;
-        return userId;
+        Logger.exitLog();
     }
 
-    public interface IDbHandlerCallback {
-
-        void onSuccess();
-
-        void onFailure();
-
-    }
 }

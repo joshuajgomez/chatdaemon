@@ -5,6 +5,7 @@ import android.util.Log;
 import com.joshgm3z.chatdaemon.common.data.Chat;
 import com.joshgm3z.chatdaemon.common.utils.ChatInfoBuilder;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
+import com.joshgm3z.chatdaemon.common.utils.PojoBuilder;
 import com.joshgm3z.chatdaemon.service.ContactFetcher;
 
 import java.util.List;
@@ -25,13 +26,14 @@ public class HomePresenter implements IHomePresenter {
 
     @Override
     public void onAppStart() {
-        mHomeModel.getChatList();
+        mHomeModel.listenForMessages();
     }
 
     @Override
     public void chatListReceived(List<Chat> chatList) {
         Logger.entryLog();
         Logger.log(Log.INFO, "chatList.size = [" + chatList.size() + "]");
+        chatList = PojoBuilder.getDateSortedChatList(chatList);
         mHomeView.updateChatList(mChatInfoBuilder.getChatInfoList(chatList));
         Logger.exitLog();
     }

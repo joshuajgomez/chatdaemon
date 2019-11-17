@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.joshgm3z.chatdaemon.R;
 import com.joshgm3z.chatdaemon.common.Const;
 import com.joshgm3z.chatdaemon.common.data.Chat;
-import com.joshgm3z.chatdaemon.presentation.home.adapter.ChatViewHolder;
 
 import java.util.List;
 

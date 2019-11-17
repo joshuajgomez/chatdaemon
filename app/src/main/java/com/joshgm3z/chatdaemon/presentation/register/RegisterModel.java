@@ -1,6 +1,7 @@
 package com.joshgm3z.chatdaemon.presentation.register;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -46,6 +47,7 @@ public class RegisterModel implements IRegisterModel {
     @Override
     public void checkUser(String phoneNumber) {
         Logger.entryLog();
+        Logger.log(Log.INFO, "phoneNumber = [" + phoneNumber + "]");
         mFirebaseFirestore.collection(Const.DbCollections.USERS)
                 .whereEqualTo(Const.DbFields.PHONE_NUMBER, phoneNumber)
                 .get()

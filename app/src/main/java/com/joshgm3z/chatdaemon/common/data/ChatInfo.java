@@ -6,7 +6,7 @@ public class ChatInfo {
 
     private String mSubTitle;
 
-    private String mDateTime;
+    private long mDateTime;
 
     private int mStatus;
 
@@ -61,11 +61,11 @@ public class ChatInfo {
         mSubTitle = subTitle;
     }
 
-    public String getDateTime() {
+    public long getDateTime() {
         return mDateTime;
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(long dateTime) {
         mDateTime = dateTime;
     }
 

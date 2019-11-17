@@ -4,11 +4,17 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.joshgm3z.chatdaemon.common.Const;
 import com.joshgm3z.chatdaemon.common.data.Chat;
@@ -17,9 +23,11 @@ import com.joshgm3z.chatdaemon.common.utils.DummyData;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 import com.joshgm3z.chatdaemon.common.utils.PojoBuilder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class HomeModel implements IHomeModel {
+public class HomeModel implements IHomeModel, EventListener<QuerySnapshot> {
 
     private IHomePresenter mHomePresenter;
 
@@ -37,39 +45,25 @@ public class HomeModel implements IHomeModel {
     }
 
     @Override
-    public void getChatList() {
-        Logger.entryLog();
-        mFirebaseFirestore.collection(Const.DbCollections.CHATS)
-                .whereEqualTo(Const.DbFields.FROM_USER, mUserId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            // Task success
-                            QuerySnapshot result = task.getResult();
-                            if (result.size() > 0) {
+    public void listenForMessages() {
+        CollectionReference collection = mFirebaseFirestore.collection(Const.DbCollections.CHATS);
+        collection.whereEqualTo(Const.DbFields.FROM_USER, mUserId);
+        Query query = collection.whereEqualTo(Const.DbFields.FROM_USER, mUserId);
+        query.orderBy(Const.DbFields.DATE_TIME);
+        query.addSnapshotListener(this);
+    }
 
-                                // Result received
-                                List<DocumentSnapshot> documents = result.getDocuments();
 
-                                List<Chat> chatList = PojoBuilder.getChatList(mContext, documents);
+    @Override
+    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+        if (e != null) {
+            Logger.log(Log.WARN, "Listen failed");
+            return;
+        }
+        List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
 
-                                if (!chatList.isEmpty()) {
-                                    mHomePresenter.chatListReceived(chatList);
-                                } else {
-                                    Logger.log(Log.WARN, "No chat found: chatList is empty");
-                                }
-                            } else {
-                                // No chat found
-                                Logger.log(Log.WARN, "No chat found: result is empty");
-                            }
-                        } else {
-                            // Task failed
-                            Logger.exceptionLog(task.getException());
-                        }
-                    }
-                });
-        Logger.exitLog();
+        List<Chat> chatList = PojoBuilder.getChatList(mContext, documents);
+        Logger.log(Log.INFO, "chatList update = [" + chatList + "]");
+        mHomePresenter.chatListReceived(chatList);
     }
 }

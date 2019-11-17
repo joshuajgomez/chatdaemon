@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface IChatModel {
 
-    List<Chat> getChatList(String userId);
+    void listenForMessages(String userId);
 
+    void sendMessage(String message);
 }

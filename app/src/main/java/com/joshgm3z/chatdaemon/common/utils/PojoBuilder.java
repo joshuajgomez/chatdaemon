@@ -10,6 +10,7 @@ import com.joshgm3z.chatdaemon.common.database.AppDatabase;
 import com.joshgm3z.chatdaemon.common.database.entity.User;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class PojoBuilder {
@@ -38,19 +39,17 @@ public class PojoBuilder {
                 User toUser = null;
 
                 if (fromUserId.equals(SharedPrefs.getInstance(context).getUser().getId())) {
-                    Logger.log(Log.INFO, "%%%%%%%%%%%% Sent");
                     toUser = appDatabase.mUserDao().getUser(toUserId);
                 } else if (toUserId.equals(SharedPrefs.getInstance(context).getUser().getId())) {
-                    Logger.log(Log.INFO, "%%%%%%%%%%%% Received");
                     fromUser = appDatabase.mUserDao().getUser(fromUserId);
                 } else {
-                    Logger.log(Log.WARN, "%%%%%%%%%%%% Invalid chat: " + document.getData());
+                    Logger.log(Log.WARN, "Invalid chat: " + document.getData());
                 }
 
                 if (fromUser != null || toUser != null) {
                     Chat chat = new Chat();
                     chat.setId(document.getId());
-                    String dateTime = (String) document.get(Const.DbFields.DATE_TIME);
+                    String dateTime = String.valueOf(document.get(Const.DbFields.DATE_TIME));
                     chat.setTime(Long.parseLong(dateTime));
                     chat.setFromUser(fromUser);
                     chat.setToUser(toUser);
@@ -63,6 +62,16 @@ public class PojoBuilder {
         } else {
             Logger.log(Log.WARN, "documents is null");
         }
+        return getDateSortedChatList(chatList);
+    }
+
+    public static List<Chat> getDateSortedChatList(List<Chat> chatList) {
+        chatList.sort(new Comparator<Chat>() {
+            @Override
+            public int compare(Chat chat1, Chat chat2) {
+                return chat1.getTime() > chat2.getTime() ? 1 : 0;
+            }
+        });
         return chatList;
     }
 }

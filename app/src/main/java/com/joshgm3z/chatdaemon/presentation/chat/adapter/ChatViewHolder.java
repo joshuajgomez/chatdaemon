@@ -1,4 +1,4 @@
-package com.joshgm3z.chatdaemon.presentation.home.adapter;
+package com.joshgm3z.chatdaemon.presentation.chat.adapter;
 
 import android.view.View;
 import android.widget.TextView;
@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.joshgm3z.chatdaemon.R;
 import com.joshgm3z.chatdaemon.common.data.Chat;
+import com.joshgm3z.chatdaemon.common.utils.DateUtil;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -15,7 +18,10 @@ import butterknife.ButterKnife;
 public class ChatViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.tv_message)
-    TextView mTextView;
+    TextView mTvMessage;
+
+    @BindView(R.id.tv_date_time)
+    TextView mTvDateTime;
 
     public ChatViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -23,6 +29,7 @@ public class ChatViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setData(Chat chat) {
-        mTextView.setText(chat.getMessage());
+        mTvMessage.setText(chat.getMessage());
+        mTvDateTime.setText(DateUtil.getPrettyTime(chat.getTime()));
     }
 }

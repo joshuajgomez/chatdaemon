@@ -49,6 +49,9 @@ public class ContactFetcher {
 
             String name = contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            Logger.log(Log.INFO, "phoneNumber before = [" + phoneNumber + "]");
+            phoneNumber = phoneNumber.replaceAll("\\s+","");
+            Logger.log(Log.INFO, "phoneNumber after = [" + phoneNumber + "]");
 
             User user = new User();
             user.setName(name);

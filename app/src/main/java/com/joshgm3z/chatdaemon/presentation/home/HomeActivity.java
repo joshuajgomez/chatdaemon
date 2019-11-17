@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,7 +21,10 @@ import com.joshgm3z.chatdaemon.common.utils.SharedPrefs;
 import com.joshgm3z.chatdaemon.presentation.chat.ChatActivity;
 import com.joshgm3z.chatdaemon.presentation.home.adapter.HomeChatAdapter;
 import com.joshgm3z.chatdaemon.presentation.home.adapter.IHomeAdapterCallback;
+import com.joshgm3z.chatdaemon.presentation.home.search.ISearchFragmentCallback;
+import com.joshgm3z.chatdaemon.presentation.home.search.UserSearchFragment;
 import com.joshgm3z.chatdaemon.presentation.register.RegisterActivity;
+import com.joshgm3z.chatdaemon.presentation.register.phoneNumber.RegisterPhoneFragment;
 import com.joshgm3z.chatdaemon.service.ContactFetcher;
 
 import java.util.List;
@@ -25,10 +32,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeAdapterCallback {
+public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeAdapterCallback, View.OnClickListener, ISearchFragmentCallback {
 
     @BindView(R.id.rv_home_chat_list)
     RecyclerView mRecyclerView;
+
+    @BindView(R.id.ic_search)
+    ImageView mIvSearch;
 
     private HomeChatAdapter mHomeChatAdapter;
 
@@ -76,6 +86,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
 
     private void initUI() {
         ButterKnife.bind(this);
+        mIvSearch.setOnClickListener(this);
 
         mHomeChatAdapter = new HomeChatAdapter(this);
         mRecyclerView.setAdapter(mHomeChatAdapter);
@@ -94,11 +105,24 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
         ChatActivity.startActivity(this, chatInfo.getUserId());
     }
 
-    public static void startActivity(Context context, String userId){
+    public static void startActivity(Context context, String userId) {
         Logger.entryLog();
         Intent intent = new Intent(context, HomeActivity.class);
-        intent.putExtra(USER_ID,userId);
+        intent.putExtra(USER_ID, userId);
         context.startActivity(intent);
         Logger.exitLog();
     }
+
+    @Override
+    public void onClick(View view) {
+        Fragment userSearchFragment = UserSearchFragment.newInstance();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fl_home, userSearchFragment).commit();
+    }
+
+    @Override
+    public void onUserClick(String userId) {
+        ChatActivity.startActivity(this, userId);
+    }
+
 }

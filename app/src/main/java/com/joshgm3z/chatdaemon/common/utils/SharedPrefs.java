@@ -51,6 +51,7 @@ public class SharedPrefs {
         editor.putString(USER_NAME, user.getName());
         editor.putString(USER_PHONE_NUMBER, user.getPhoneNumber());
         editor.apply();
+        Logger.log(Log.INFO, "user = [" + user + "]");
     }
 
     public User getUser() {
@@ -58,6 +59,7 @@ public class SharedPrefs {
         user.setId(mSharedPref.getString(USER_ID, ""));
         user.setName(mSharedPref.getString(USER_NAME, ""));
         user.setPhoneNumber(mSharedPref.getString(USER_PHONE_NUMBER, ""));
+        Logger.log(Log.INFO, "user = [" + user + "]");
         return user;
     }
 }

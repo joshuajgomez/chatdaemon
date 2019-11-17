@@ -20,25 +20,21 @@ public class ChatInfoBuilder {
             int chatType;
             User user;
             if (chat.getFromUser() != null) {
-                Logger.log(Log.INFO, "%%%%%%%%%%%% Received");
                 user = chat.getFromUser();
                 chatType = Const.ChatType.RECEIVED;
             } else {
-                Logger.log(Log.INFO, "%%%%%%%%%%%% Sent");
                 user = chat.getToUser();
                 chatType = Const.ChatType.SENT;
             }
-            Logger.log(Log.INFO, "%%%%%%%%%%%% user = [" + user + "]");
             ChatInfo chatInfo = new ChatInfo();
             chatInfo.setTitle(user.getName());
             chatInfo.setSubTitle(chat.getMessage());
             chatInfo.setUserId(user.getId());
             chatInfo.setChatType(chatType);
+            chatInfo.setDateTime(chat.getTime());
 
             chatInfoBuffer.put(user.getId(), chatInfo);
         }
-
-        Logger.log("chatInfoBuffer.size() " + chatInfoBuffer.size());
 
         List<ChatInfo> chatInfoList = getList(chatInfoBuffer);
 
