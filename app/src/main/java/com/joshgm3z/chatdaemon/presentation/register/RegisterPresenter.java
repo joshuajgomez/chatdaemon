@@ -24,9 +24,9 @@ public class RegisterPresenter implements IRegisterPresenter {
     }
 
     @Override
-    public void onAddUserClick(String name, String phoneNumber) {
+    public void onAddUserClick(String name) {
         Logger.entryLog();
-        mRegisterModel.addUser(name, phoneNumber);
+        mRegisterModel.addUser(name);
         Logger.exitLog();
     }
 
@@ -50,6 +50,14 @@ public class RegisterPresenter implements IRegisterPresenter {
     public void newUser(String phoneNumber) {
         Logger.entryLog();
         Logger.log(Log.INFO, "phoneNumber = [" + phoneNumber + "]");
+        mRegisterView.showRegisterNameScreen(phoneNumber);
+        Logger.exitLog();
+    }
+
+    @Override
+    public void onUserAdded(User user) {
+        Logger.entryLog();
+        mRegisterView.gotoHomeScreen(user);
         Logger.exitLog();
     }
 }

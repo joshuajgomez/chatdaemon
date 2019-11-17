@@ -6,16 +6,21 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.joshgm3z.chatdaemon.common.Const;
-import com.joshgm3z.chatdaemon.common.DbHandler;
 import com.joshgm3z.chatdaemon.common.database.entity.User;
+import com.joshgm3z.chatdaemon.common.utils.FirebaseLogger;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 import com.joshgm3z.chatdaemon.common.utils.PojoBuilder;
+import com.joshgm3z.chatdaemon.common.utils.SharedPrefs;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class RegisterModel implements IRegisterModel {
@@ -26,6 +31,8 @@ public class RegisterModel implements IRegisterModel {
 
     private FirebaseFirestore mFirebaseFirestore;
 
+    private String newUserPhoneNumber;
+
     public RegisterModel(Context context, IRegisterPresenter registerPresenter) {
         mContext = context;
         mRegisterPresenter = registerPresenter;
@@ -33,19 +40,45 @@ public class RegisterModel implements IRegisterModel {
     }
 
     @Override
-    public void addUser(String name, String phoneNumber) {
-
-        Logger.log("name = [" + name + "], phoneNumber = [" + phoneNumber + "]");
-
+    public void addUser(String name) {
         User user = new User();
         user.setName(name);
-        user.setPhoneNumber(phoneNumber);
+        user.setPhoneNumber(newUserPhoneNumber);
+        Logger.log(Log.INFO, "user = [" + user + "]");
+        addUser(user);
+    }
 
-        DbHandler.getInstance(mContext).addUser(user);
+    private void addUser(final User user) {
+        Logger.entryLog();
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put(Const.DbFields.NAME, user.getName());
+        userMap.put(Const.DbFields.PHONE_NUMBER, user.getPhoneNumber());
+
+        // Add a new document with a generated ID
+        mFirebaseFirestore.collection(Const.DbCollections.USERS)
+                .add(userMap)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Logger.log("User added: " + documentReference.getId());
+                        FirebaseLogger.getInstance(mContext).log("User added: " + documentReference.getId());
+                        user.setId(documentReference.getId());
+                        SharedPrefs.getInstance(mContext).setUser(user);
+                        mRegisterPresenter.onUserAdded(user);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Logger.log("Error adding user: " + e.getCause().getMessage());
+                        FirebaseLogger.getInstance(mContext).log("Error adding user: " + e.getCause().getMessage());
+                    }
+                });
+        Logger.exitLog();
     }
 
     @Override
-    public void checkUser(String phoneNumber) {
+    public void checkUser(final String phoneNumber) {
         Logger.entryLog();
         Logger.log(Log.INFO, "phoneNumber = [" + phoneNumber + "]");
         mFirebaseFirestore.collection(Const.DbCollections.USERS)
@@ -66,7 +99,9 @@ public class RegisterModel implements IRegisterModel {
 
                             } else {
                                 // New user
-                                Logger.log("New user");
+                                newUserPhoneNumber = phoneNumber;
+                                mRegisterPresenter.newUser(newUserPhoneNumber);
+                                Logger.log("New user: " + newUserPhoneNumber);
                             }
                         } else {
                             // Task failed

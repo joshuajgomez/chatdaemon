@@ -80,7 +80,7 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
     public void onClick(View view) {
         Logger.entryLog();
         String phoneNumber = mEtPhoneNumber.getText().toString();
-        if (phoneNumber != null) {
+        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
             phoneNumber = phoneNumber.trim();
             // mPhonePresenter.onContinueButtonClick(phoneNumber);
             mRegisterPhoneListener.onPhoneNumberEntered(phoneNumber);

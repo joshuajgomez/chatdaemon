@@ -68,7 +68,6 @@ public class ChatModel implements IChatModel, EventListener<QuerySnapshot> {
         Logger.log(Log.INFO, "userId = [" + userId + "]");
         Logger.log(Log.INFO, "");
         CollectionReference collection = mFirebaseFirestore.collection(Const.DbCollections.CHATS);
-        collection.orderBy(Const.DbFields.DATE_TIME);
         List<String> senderList = Arrays.asList(mCurrentUser.getId(), userId);
         collection.whereIn(Const.DbFields.FROM_USER, senderList);
         Query query = collection.whereIn(Const.DbFields.TO_USER, senderList);

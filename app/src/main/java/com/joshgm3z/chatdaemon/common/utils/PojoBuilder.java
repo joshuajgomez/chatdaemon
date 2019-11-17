@@ -10,6 +10,7 @@ import com.joshgm3z.chatdaemon.common.database.AppDatabase;
 import com.joshgm3z.chatdaemon.common.database.entity.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -66,10 +67,10 @@ public class PojoBuilder {
     }
 
     public static List<Chat> getDateSortedChatList(List<Chat> chatList) {
-        chatList.sort(new Comparator<Chat>() {
+        Collections.sort(chatList, new Comparator<Chat>() {
             @Override
             public int compare(Chat chat1, Chat chat2) {
-                return chat1.getTime() > chat2.getTime() ? 1 : 0;
+                return chat1.getTime() < chat2.getTime() ? 1 : 0;
             }
         });
         return chatList;

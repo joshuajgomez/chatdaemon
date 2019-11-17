@@ -42,32 +42,6 @@ public class DbHandler {
         mFirebaseFirestore = FirebaseFirestore.getInstance();
     }
 
-    public void addUser(User user) {
-        Logger.entryLog();
-        Map<String, Object> userMap = new HashMap<>();
-        userMap.put(Const.DbFields.NAME, user.getName());
-        userMap.put(Const.DbFields.PHONE_NUMBER, user.getPhoneNumber());
-
-        // Add a new document with a generated ID
-        mFirebaseFirestore.collection(Const.DbCollections.USERS)
-                .add(userMap)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Logger.log("User added: " + documentReference.getId());
-                        FirebaseLogger.getInstance(mContext).log("User added: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Logger.log("Error adding user: " + e.getCause().getMessage());
-                        FirebaseLogger.getInstance(mContext).log("Error adding user: " + e.getCause().getMessage());
-                    }
-                });
-        Logger.exitLog();
-    }
-
     public void sendMessage(Chat chat) {
         Logger.entryLog();
         Logger.log(Log.INFO, "chat = [" + chat + "]");

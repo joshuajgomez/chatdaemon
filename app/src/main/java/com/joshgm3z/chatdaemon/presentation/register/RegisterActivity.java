@@ -14,6 +14,7 @@ import com.joshgm3z.chatdaemon.R;
 import com.joshgm3z.chatdaemon.common.database.entity.User;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 import com.joshgm3z.chatdaemon.presentation.home.HomeActivity;
+import com.joshgm3z.chatdaemon.presentation.register.name.RegisterNameFragment;
 import com.joshgm3z.chatdaemon.presentation.register.phoneNumber.IRegisterFragmentListener;
 import com.joshgm3z.chatdaemon.presentation.register.phoneNumber.RegisterPhoneFragment;
 
@@ -44,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterView
         Logger.exitLog();
     }
 
-    public static void startActivity(Context context){
+    public static void startActivity(Context context) {
         Logger.entryLog();
         Intent intent = new Intent(context, RegisterActivity.class);
         context.startActivity(intent);
@@ -60,6 +61,14 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterView
     }
 
     @Override
+    public void onNameEntered(String name) {
+        Logger.entryLog();
+        Logger.log(Log.INFO, "name = [" + name + "]");
+        mRegisterPresenter.onAddUserClick(name);
+        Logger.exitLog();
+    }
+
+    @Override
     public void gotoHomeScreen(User user) {
         Logger.entryLog();
         HomeActivity.startActivity(this, user.getId());
@@ -69,6 +78,9 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterView
     @Override
     public void showRegisterNameScreen(String phoneNumber) {
         Logger.entryLog();
+        Fragment registerNameFragment = RegisterNameFragment.newInstance();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fragment_register_phone, registerNameFragment).commit();
         Logger.exitLog();
     }
 }

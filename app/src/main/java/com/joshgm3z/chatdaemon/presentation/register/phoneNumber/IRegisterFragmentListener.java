@@ -5,4 +5,6 @@ public interface IRegisterFragmentListener {
 
     void onPhoneNumberEntered(String phoneNumber);
 
+    void onNameEntered(String name);
+
 }

@@ -24,7 +24,6 @@ import com.joshgm3z.chatdaemon.presentation.home.adapter.IHomeAdapterCallback;
 import com.joshgm3z.chatdaemon.presentation.home.search.ISearchFragmentCallback;
 import com.joshgm3z.chatdaemon.presentation.home.search.UserSearchFragment;
 import com.joshgm3z.chatdaemon.presentation.register.RegisterActivity;
-import com.joshgm3z.chatdaemon.presentation.register.phoneNumber.RegisterPhoneFragment;
 import com.joshgm3z.chatdaemon.service.ContactFetcher;
 
 import java.util.List;
@@ -117,7 +116,10 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
     public void onClick(View view) {
         Fragment userSearchFragment = UserSearchFragment.newInstance();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fl_home, userSearchFragment).commit();
+        fragmentTransaction
+                .add(R.id.fl_home, userSearchFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
