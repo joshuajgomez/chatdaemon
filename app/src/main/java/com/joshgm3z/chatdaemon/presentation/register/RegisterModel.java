@@ -51,8 +51,8 @@ public class RegisterModel implements IRegisterModel {
     private void addUser(final User user) {
         Logger.entryLog();
         Map<String, Object> userMap = new HashMap<>();
-        userMap.put(Const.DbFields.NAME, user.getName());
-        userMap.put(Const.DbFields.PHONE_NUMBER, user.getPhoneNumber());
+        userMap.put(Const.DbFields.User.NAME, user.getName());
+        userMap.put(Const.DbFields.User.PHONE_NUMBER, user.getPhoneNumber());
 
         // Add a new document with a generated ID
         mFirebaseFirestore.collection(Const.DbCollections.USERS)
@@ -82,7 +82,7 @@ public class RegisterModel implements IRegisterModel {
         Logger.entryLog();
         Logger.log(Log.INFO, "phoneNumber = [" + phoneNumber + "]");
         mFirebaseFirestore.collection(Const.DbCollections.USERS)
-                .whereEqualTo(Const.DbFields.PHONE_NUMBER, phoneNumber)
+                .whereEqualTo(Const.DbFields.User.PHONE_NUMBER, phoneNumber)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

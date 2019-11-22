@@ -52,6 +52,7 @@ public class ChatModel implements IChatModel, EventListener<QuerySnapshot>, OnCo
     }
 
     private void getOtherUser(String otherUser) {
+        mOtherUserId = otherUser;
         new AsyncTask<String, Void, User>() {
             @Override
             protected User doInBackground(String... strings) {
@@ -63,36 +64,37 @@ public class ChatModel implements IChatModel, EventListener<QuerySnapshot>, OnCo
             protected void onPostExecute(User user) {
                 Logger.log(Log.INFO, "user = [" + user + "]");
                 mOtherUser = user;
-                // listenForMessages(mCurrentUser.getId(), mOtherUser.getId());
-                // listenForMessages(mOtherUser.getId(), mCurrentUser.getId());
             }
         }.execute(otherUser);
     }
 
     @Override
     public void listenForMessages(String userId) {
-        mOtherUserId = userId;
+        Logger.entryLog();
         Logger.log(Log.INFO, "userId = [" + userId + "]");
         CollectionReference collection = mFirebaseFirestore.collection(Const.DbCollections.CHATS);
-        collection.whereIn(Const.DbFields.TO_USER, Arrays.asList(mCurrentUser.getId(), userId));
-        collection.whereIn(Const.DbFields.FROM_USER, Arrays.asList(mCurrentUser.getId(), userId));
+        collection.whereIn(Const.DbFields.Chat.TO_USER, Arrays.asList(mCurrentUser.getId(), userId));
+        collection.whereIn(Const.DbFields.Chat.FROM_USER, Arrays.asList(mCurrentUser.getId(), userId));
         collection.addSnapshotListener(this);
+        Logger.exitLog();
     }
 
     private void checkNewMessages() {
+        Logger.entryLog();
         Logger.log(Log.INFO, "Checking for new messages");
         CollectionReference collection = mFirebaseFirestore.collection(Const.DbCollections.CHATS);
         Query sentQuery;
-        sentQuery = collection.whereEqualTo(Const.DbFields.FROM_USER, mCurrentUser.getId());
-        sentQuery = sentQuery.whereEqualTo(Const.DbFields.TO_USER, mOtherUserId);
+        sentQuery = collection.whereEqualTo(Const.DbFields.Chat.FROM_USER, mCurrentUser.getId());
+        sentQuery = sentQuery.whereEqualTo(Const.DbFields.Chat.TO_USER, mOtherUserId);
         Task<QuerySnapshot> sentQueryTask = sentQuery.get();
 
         Query receivedQuery;
-        receivedQuery = collection.whereEqualTo(Const.DbFields.FROM_USER, mOtherUserId);
-        receivedQuery = receivedQuery.whereEqualTo(Const.DbFields.TO_USER, mCurrentUser.getId());
+        receivedQuery = collection.whereEqualTo(Const.DbFields.Chat.FROM_USER, mOtherUserId);
+        receivedQuery = receivedQuery.whereEqualTo(Const.DbFields.Chat.TO_USER, mCurrentUser.getId());
         Task<QuerySnapshot> receivedQueryTask = receivedQuery.get();
 
         Tasks.whenAllComplete(sentQueryTask, receivedQueryTask).addOnCompleteListener(this);
+        Logger.exitLog();
     }
 
     @Override
@@ -104,6 +106,7 @@ public class ChatModel implements IChatModel, EventListener<QuerySnapshot>, OnCo
         chat.setFromUser(mCurrentUser);
         chat.setToUser(mOtherUser);
         chat.setTime(System.currentTimeMillis());
+        chat.setStatus(Chat.Status.SENT);
         DbHandler.getInstance(mContext).sendMessage(chat);
         Logger.exitLog();
     }
@@ -114,17 +117,20 @@ public class ChatModel implements IChatModel, EventListener<QuerySnapshot>, OnCo
             Logger.log(Log.WARN, "Listen failed");
             return;
         }
-        Logger.log(Log.INFO, "Chat updated");
         checkNewMessages();
+        Logger.log(Log.INFO, "Chat updated");
     }
 
     @Override
     public void onComplete(@NonNull Task<List<Task<?>>> fullTaskList) {
+        Logger.entryLog();
+        Logger.log(Log.INFO, "fullTaskList.getResult.size = [" + fullTaskList.getResult().size() + "]");
         List<Task<?>> taskList = fullTaskList.getResult();
         Task<QuerySnapshot> sentTask = (Task<QuerySnapshot>) taskList.get(0);
         Task<QuerySnapshot> receivedTask = (Task<QuerySnapshot>) taskList.get(1);
-
-        if (sentTask.isSuccessful()) {
+        Logger.log(Log.INFO, "sentTask.isSuccessful() = [" + sentTask.isSuccessful() + "]");
+        Logger.log(Log.INFO, "receivedTask.isSuccessful() = [" + receivedTask.isSuccessful() + "]");
+        if (sentTask.isSuccessful() || receivedTask.isSuccessful()) {
             // Task success
             QuerySnapshot sentResult = sentTask.getResult();
             QuerySnapshot receivedResult = receivedTask.getResult();
@@ -132,7 +138,6 @@ public class ChatModel implements IChatModel, EventListener<QuerySnapshot>, OnCo
                 List<DocumentSnapshot> documents = sentResult.getDocuments();
                 documents.addAll(receivedResult.getDocuments());
                 List<Chat> chatList = PojoBuilder.getChatList(mContext, documents);
-                Logger.log(Log.INFO, "chatList = [" + chatList + "]");
                 mChatPresenter.chatListReceived(chatList);
             } else {
                 // No chat found
@@ -140,9 +145,9 @@ public class ChatModel implements IChatModel, EventListener<QuerySnapshot>, OnCo
             }
         } else {
             // Task failed
+            Logger.log(Log.WARN, "sentTask/receivedTask not successful");
             Logger.exceptionLog(fullTaskList.getException());
         }
-
-
+        Logger.exitLog();
     }
 }

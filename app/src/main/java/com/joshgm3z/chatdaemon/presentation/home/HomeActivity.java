@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +26,8 @@ import com.joshgm3z.chatdaemon.presentation.home.adapter.IHomeAdapterCallback;
 import com.joshgm3z.chatdaemon.presentation.home.search.ISearchFragmentCallback;
 import com.joshgm3z.chatdaemon.presentation.home.search.UserSearchFragment;
 import com.joshgm3z.chatdaemon.presentation.register.RegisterActivity;
-import com.joshgm3z.chatdaemon.service.ContactFetcher;
+import com.joshgm3z.chatdaemon.common.utils.ContactFetcher;
+import com.joshgm3z.chatdaemon.service.ChatService;
 
 import java.util.List;
 
@@ -39,6 +41,9 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
 
     @BindView(R.id.ic_search)
     ImageView mIvSearch;
+
+    @BindView(R.id.tv_app_title)
+    TextView mTvAppTitle;
 
     private HomeChatAdapter mHomeChatAdapter;
 
@@ -69,6 +74,8 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
 
         Logger.log(Log.INFO, "userId = [" + userId + "]");
         mHomePresenter = new HomePresenter(this, userId);
+        Intent intent = new Intent(this, ChatService.class);
+        startService(intent);
 
         initUI();
         Logger.exitLog();
@@ -86,6 +93,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
 
     private void initUI() {
         ButterKnife.bind(this);
+        mTvAppTitle.setText(SharedPrefs.getInstance(this).getUser().getName());
         mIvSearch.setOnClickListener(this);
 
         mHomeChatAdapter = new HomeChatAdapter(this);

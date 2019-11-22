@@ -23,6 +23,9 @@ public class ChatViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.tv_date_time)
     TextView mTvDateTime;
 
+    @BindView(R.id.tv_status)
+    TextView mTvStatus;
+
     public ChatViewHolder(@NonNull View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -31,5 +34,6 @@ public class ChatViewHolder extends RecyclerView.ViewHolder {
     public void setData(Chat chat) {
         mTvMessage.setText(chat.getMessage());
         mTvDateTime.setText(DateUtil.getPrettyTime(chat.getTime()));
+        mTvStatus.setText(chat.getStatus() + "");
     }
 }

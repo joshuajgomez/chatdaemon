@@ -17,17 +17,19 @@ public class Const {
         String CHATS = "chats";
     }
 
-    @StringDef({DbFields.NAME, DbFields.PHONE_NUMBER})
     public @interface DbFields {
-        String NAME = "name";
-        String PHONE_NUMBER = "phonenumber";
         String ID = "id";
-
-        String FROM_USER = "fromuser";
-        String TO_USER = "touser";
-
-        String DATE_TIME = "datetime";
-        String MESSAGE = "message";
+        interface Chat {
+            String DATE_TIME = "datetime";
+            String MESSAGE = "message";
+            String FROM_USER = "fromuser";
+            String TO_USER = "touser";
+            String STATUS = "status";
+        }
+        interface User {
+            String NAME = "name";
+            String PHONE_NUMBER = "phonenumber";
+        }
     }
 
 }

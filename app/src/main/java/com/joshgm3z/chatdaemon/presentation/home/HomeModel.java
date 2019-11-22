@@ -47,8 +47,8 @@ public class HomeModel implements IHomeModel, EventListener<QuerySnapshot> {
     @Override
     public void listenForMessages() {
         CollectionReference collection = mFirebaseFirestore.collection(Const.DbCollections.CHATS);
-        collection.whereEqualTo(Const.DbFields.FROM_USER, mUserId);
-        collection.whereEqualTo(Const.DbFields.TO_USER, mUserId);
+        collection.whereEqualTo(Const.DbFields.Chat.FROM_USER, mUserId);
+        collection.whereEqualTo(Const.DbFields.Chat.TO_USER, mUserId);
         collection.addSnapshotListener(this);
     }
 

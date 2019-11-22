@@ -18,6 +18,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -41,6 +45,14 @@ dependencies {
 
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.4.0'
+
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.mockito:mockito-core:2.4.0"
+    testImplementation "org.powermock:powermock-core:1.7.0RC2"
+    testImplementation "org.powermock:powermock-module-junit4:1.7.0RC2"
+    testImplementation "org.powermock:powermock-api-mockito2:1.7.0RC2"
 }
 
 apply plugin: 'com.google.gms.google-services'

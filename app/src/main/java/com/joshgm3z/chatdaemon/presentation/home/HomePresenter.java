@@ -5,8 +5,6 @@ import android.util.Log;
 import com.joshgm3z.chatdaemon.common.data.Chat;
 import com.joshgm3z.chatdaemon.common.utils.ChatInfoBuilder;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
-import com.joshgm3z.chatdaemon.common.utils.PojoBuilder;
-import com.joshgm3z.chatdaemon.service.ContactFetcher;
 
 import java.util.List;
 

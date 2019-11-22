@@ -14,6 +14,8 @@ public class Chat {
 
     private String mMessage;
 
+    private int mStatus;
+
     public Chat() {
     }
 
@@ -65,14 +67,29 @@ public class Chat {
         mMessage = message;
     }
 
+    public int getStatus() {
+        return mStatus;
+    }
+
+    public void setStatus(int status) {
+        mStatus = status;
+    }
+
     @Override
     public String toString() {
         return "Chat{" +
-                "mId=" + mId +
+                "mId='" + mId + '\'' +
                 ", mFromUser=" + mFromUser +
                 ", mToUser=" + mToUser +
                 ", mTime=" + mTime +
                 ", mMessage='" + mMessage + '\'' +
+                ", mStatus=" + mStatus +
                 '}';
+    }
+
+    public @interface Status {
+        int SENT = 0;
+        int DELIVERED = 1;
+        int SEEN = 2;
     }
 }

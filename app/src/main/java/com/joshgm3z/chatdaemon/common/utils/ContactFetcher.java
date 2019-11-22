@@ -1,4 +1,4 @@
-package com.joshgm3z.chatdaemon.service;
+package com.joshgm3z.chatdaemon.common.utils;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -18,8 +18,6 @@ import com.joshgm3z.chatdaemon.common.Const;
 import com.joshgm3z.chatdaemon.common.database.AppDatabase;
 import com.joshgm3z.chatdaemon.common.database.dao.UserDao;
 import com.joshgm3z.chatdaemon.common.database.entity.User;
-import com.joshgm3z.chatdaemon.common.utils.Logger;
-import com.joshgm3z.chatdaemon.common.utils.PojoBuilder;
 import com.joshgm3z.chatdaemon.presentation.home.HomeActivity;
 
 import java.util.ArrayList;
@@ -49,9 +47,7 @@ public class ContactFetcher {
 
             String name = contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            Logger.log(Log.INFO, "phoneNumber before = [" + phoneNumber + "]");
             phoneNumber = phoneNumber.replaceAll("\\s+","");
-            Logger.log(Log.INFO, "phoneNumber after = [" + phoneNumber + "]");
 
             User user = new User();
             user.setName(name);
@@ -74,7 +70,7 @@ public class ContactFetcher {
     private void fetchUser(String phoneNumber) {
         Logger.log(Log.INFO, "phoneNumber = [" + phoneNumber + "]");
         mFirebaseFirestore.collection(Const.DbCollections.USERS)
-                .whereEqualTo(Const.DbFields.PHONE_NUMBER, phoneNumber)
+                .whereEqualTo(Const.DbFields.User.PHONE_NUMBER, phoneNumber)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -85,7 +81,6 @@ public class ContactFetcher {
                             if (result.size() > 0) {
                                 // Result received
                                 DocumentSnapshot documentSnapshot = result.getDocuments().get(0);
-                                Logger.log(Log.INFO, "documentSnapshot.getData() = [" + documentSnapshot.getData() + "]");
                                 User user = PojoBuilder.getUser(documentSnapshot);
                                 mUserList.add(user);
                                 addUser(user);

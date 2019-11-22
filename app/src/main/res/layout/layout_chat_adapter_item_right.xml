@@ -3,31 +3,40 @@
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:layout_marginStart="120dp"
+    android:layout_marginBottom="15dp"
     android:layout_weight="1"
     android:background="@color/blue"
     android:orientation="vertical"
-    android:layout_marginBottom="15dp"
     android:padding="6dp">
 
-        <TextView
-            android:id="@+id/tv_date_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:text="Sun Nov 11, 11:00 PM"
-            android:textColor="@color/black"
-            android:textSize="10sp" />
+    <TextView
+        android:id="@+id/tv_date_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="Sun Nov 11, 11:00 PM"
+        android:textColor="@color/black"
+        android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/tv_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:text="Message"
-            android:textAlignment="textStart"
-            android:textColor="@color/black"
-            android:textSize="17sp" />
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:text="Message"
+        android:textAlignment="textStart"
+        android:textColor="@color/black"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:text="-1"
+        android:textColor="@color/yellow" />
 
 </RelativeLayout>

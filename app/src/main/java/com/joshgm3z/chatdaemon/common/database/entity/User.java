@@ -15,10 +15,10 @@ public class User {
     @ColumnInfo(name = Const.DbFields.ID)
     private String mId;
 
-    @ColumnInfo(name = Const.DbFields.NAME)
+    @ColumnInfo(name = Const.DbFields.User.NAME)
     private String mName;
 
-    @ColumnInfo(name = Const.DbFields.PHONE_NUMBER)
+    @ColumnInfo(name = Const.DbFields.User.PHONE_NUMBER)
     private String mPhoneNumber;
 
     public User() {

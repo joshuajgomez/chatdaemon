@@ -37,7 +37,7 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
 
     private ChatAdapter mChatAdapter;
 
-    private static final String USER_ID = "USER_ID";
+    public static final String USER_ID = "USER_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
