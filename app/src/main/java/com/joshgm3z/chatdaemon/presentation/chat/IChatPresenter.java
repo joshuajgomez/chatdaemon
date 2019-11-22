@@ -11,4 +11,6 @@ public interface IChatPresenter {
     void chatListReceived(List<Chat> chatList);
 
     void onSendClick(String message);
+
+    void onAppStop();
 }

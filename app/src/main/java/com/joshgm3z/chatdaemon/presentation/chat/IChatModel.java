@@ -9,4 +9,6 @@ public interface IChatModel {
     void listenForMessages(String userId);
 
     void sendMessage(String message);
+
+    void chatScreenShowing(boolean isShowing);
 }

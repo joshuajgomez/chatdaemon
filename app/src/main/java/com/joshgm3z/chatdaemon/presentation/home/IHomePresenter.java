@@ -11,4 +11,5 @@ public interface IHomePresenter {
     void chatListReceived(List<Chat> chatList);
 
     void noChatFound();
+
 }

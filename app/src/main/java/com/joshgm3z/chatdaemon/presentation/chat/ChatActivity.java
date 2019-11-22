@@ -63,7 +63,6 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
         mChatAdapter = new ChatAdapter();
         mRecyclerView.setAdapter(mChatAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mChatPresenter.onAppStart();
     }
 
     @Override
@@ -110,5 +109,17 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
             status = true;
         }
         return status;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mChatPresenter.onAppStart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mChatPresenter.onAppStop();
     }
 }

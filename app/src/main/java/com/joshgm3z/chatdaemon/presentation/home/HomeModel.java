@@ -52,7 +52,6 @@ public class HomeModel implements IHomeModel, EventListener<QuerySnapshot> {
         collection.addSnapshotListener(this);
     }
 
-
     @Override
     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
         if (e != null) {

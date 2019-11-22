@@ -43,6 +43,8 @@ public class ChatModel implements IChatModel, EventListener<QuerySnapshot>, OnCo
 
     private String mOtherUserId;
 
+    private boolean isChatScreenShowing = false;
+
     public ChatModel(Context context, IChatPresenter chatPresenter, String otherUser) {
         mContext = context;
         mChatPresenter = chatPresenter;
@@ -112,6 +114,12 @@ public class ChatModel implements IChatModel, EventListener<QuerySnapshot>, OnCo
     }
 
     @Override
+    public void chatScreenShowing(boolean isShowing) {
+        Logger.log(Log.INFO, "chat screen not showing");
+        isChatScreenShowing = isShowing;
+    }
+
+    @Override
     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
         if (e != null) {
             Logger.log(Log.WARN, "Listen failed");
@@ -128,8 +136,6 @@ public class ChatModel implements IChatModel, EventListener<QuerySnapshot>, OnCo
         List<Task<?>> taskList = fullTaskList.getResult();
         Task<QuerySnapshot> sentTask = (Task<QuerySnapshot>) taskList.get(0);
         Task<QuerySnapshot> receivedTask = (Task<QuerySnapshot>) taskList.get(1);
-        Logger.log(Log.INFO, "sentTask.isSuccessful() = [" + sentTask.isSuccessful() + "]");
-        Logger.log(Log.INFO, "receivedTask.isSuccessful() = [" + receivedTask.isSuccessful() + "]");
         if (sentTask.isSuccessful() || receivedTask.isSuccessful()) {
             // Task success
             QuerySnapshot sentResult = sentTask.getResult();
@@ -139,6 +145,7 @@ public class ChatModel implements IChatModel, EventListener<QuerySnapshot>, OnCo
                 documents.addAll(receivedResult.getDocuments());
                 List<Chat> chatList = PojoBuilder.getChatList(mContext, documents);
                 mChatPresenter.chatListReceived(chatList);
+                updateSeenStatus(chatList);
             } else {
                 // No chat found
                 Logger.log(Log.INFO, "No chat found");
@@ -149,5 +156,16 @@ public class ChatModel implements IChatModel, EventListener<QuerySnapshot>, OnCo
             Logger.exceptionLog(fullTaskList.getException());
         }
         Logger.exitLog();
+    }
+
+    private void updateSeenStatus(List<Chat> chatList) {
+        if (isChatScreenShowing) {
+            for (Chat chat : chatList) {
+                if (chat.getFromUser() != null && chat.getStatus() == Chat.Status.DELIVERED) {
+                    chat.setStatus(Chat.Status.SEEN);
+                    DbHandler.getInstance(mContext).updateStatus(chat);
+                }
+            }
+        }
     }
 }

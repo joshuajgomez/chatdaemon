@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.joshgm3z.chatdaemon.common.data.Chat;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
-import com.joshgm3z.chatdaemon.common.utils.PojoBuilder;
 
 import java.util.List;
 
@@ -24,6 +23,7 @@ public class ChatPresenter implements IChatPresenter {
 
     @Override
     public void onAppStart() {
+        mChatModel.chatScreenShowing(true);
         mChatModel.listenForMessages(mUserId);
     }
 
@@ -36,5 +36,10 @@ public class ChatPresenter implements IChatPresenter {
     public void onSendClick(String message) {
         Logger.log(Log.INFO, "message = [" + message + "]");
         mChatModel.sendMessage(message);
+    }
+
+    @Override
+    public void onAppStop() {
+        mChatModel.chatScreenShowing(false);
     }
 }
