@@ -108,10 +108,14 @@ public class PojoBuilder {
                     Chat chat = new Chat();
                     chat.setId(document.getId());
                     String dateTime = String.valueOf(document.get(Const.DbFields.Chat.DATE_TIME));
+                    String status = String.valueOf(document.get(Const.DbFields.Chat.STATUS));
+
                     chat.setTime(Long.parseLong(dateTime));
                     chat.setFromUser(fromUser);
                     chat.setToUser(toUser);
                     chat.setMessage((String) document.get(Const.DbFields.Chat.MESSAGE));
+                    chat.setStatus(Integer.parseInt(status));
+
                     chatList.add(chat);
                 } else {
                     Logger.log(Log.WARN, "Invalid sender or recipient");

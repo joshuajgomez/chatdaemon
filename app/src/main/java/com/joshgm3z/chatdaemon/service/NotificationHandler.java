@@ -42,16 +42,21 @@ public class NotificationHandler {
         for (Chat chat : chatList) {
             Logger.log(Log.INFO, "chat = [" + chat + "]");
             if (chat.getFromUser() != null && chat.getStatus() == Chat.Status.SENT) {
-                String title = chat.getFromUser().getName();
-                String subtitle = chat.getMessage();
-                sendNotification(chat.getFromUser().getId(), title, subtitle);
-
-
+                notifyNewMessage(chat);
             } else {
                 Logger.log(Log.WARN, "chat.getFromUser is null or chat is already seen");
             }
         }
     }
+
+    public void notifyNewMessage(Chat chat) {
+        Logger.entryLog();
+        String title = chat.getFromUser().getName();
+        String subtitle = chat.getMessage();
+        sendNotification(chat.getFromUser().getId(), title, subtitle);
+        Logger.exitLog();
+    }
+
 
     private void sendNotification(String fromUserId, String title, String subtitle) {
         Logger.log(Log.INFO, "fromUserId = [" + fromUserId + "], title = [" + title + "], subtitle = [" + subtitle + "]");

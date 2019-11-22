@@ -46,11 +46,16 @@ public class ForegroundCheckTask extends AsyncTask<Context, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean isAppInForeground) {
         super.onPostExecute(isAppInForeground);
-        if (!isAppInForeground) {
-            new NotificationHandler(mContext).notifyNewMessages(mChatList);
-        } else {
-            Logger.log(Log.INFO, "App is running in foreground");
+        for (Chat chat : mChatList) {
+            if (chat.getFromUser() != null && chat.getStatus() == Chat.Status.SENT) {
+                chat.setStatus(Chat.Status.DELIVERED);
+                DbHandler.getInstance(mContext).updateStatus(chat);
+                if (!isAppInForeground) {
+                    new NotificationHandler(mContext).notifyNewMessage(chat);
+                } else {
+                    Logger.log(Log.INFO, "App is running in foreground");
+                }
+            }
         }
-        //DbHandler.getInstance(mContext).updateMultipleChatStatus(Chat.Status.DELIVERED, mChatList);
     }
 }
