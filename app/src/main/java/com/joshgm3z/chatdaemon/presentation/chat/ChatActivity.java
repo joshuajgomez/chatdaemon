@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,7 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ChatActivity extends AppCompatActivity implements IChatView, View.OnClickListener {
+public class ChatActivity extends AppCompatActivity implements IChatView, View.OnClickListener, View.OnKeyListener {
 
     private IChatPresenter mChatPresenter;
 
@@ -55,6 +58,7 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
     private void initUI() {
         ButterKnife.bind(this);
         mBtSend.setOnClickListener(this);
+        mEtMessage.setOnKeyListener(this);
 
         mChatAdapter = new ChatAdapter();
         mRecyclerView.setAdapter(mChatAdapter);
@@ -66,7 +70,7 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
     public void updateData(List<Chat> chatList) {
         Logger.log(Log.INFO, "chatList.size = [" + chatList.size() + "]");
         mChatAdapter.setChatList(chatList);
-        mRecyclerView.scrollToPosition(chatList.size()-1);
+        mRecyclerView.scrollToPosition(chatList.size() - 1);
     }
 
 
@@ -78,6 +82,13 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
 
     @Override
     public void onClick(View view) {
+        Logger.entryLog();
+        readMessage();
+        Logger.exitLog();
+    }
+
+    private void readMessage() {
+        Logger.entryLog();
         String message = mEtMessage.getText().toString();
         if (message != null) {
             message = message.trim();
@@ -88,5 +99,16 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
             }
             mEtMessage.setText("");
         }
+        Logger.exitLog();
+    }
+
+    @Override
+    public boolean onKey(View view, int actionId, KeyEvent keyEvent) {
+        boolean status = false;
+        if (actionId == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == 1) {
+            readMessage();
+            status = true;
+        }
+        return status;
     }
 }

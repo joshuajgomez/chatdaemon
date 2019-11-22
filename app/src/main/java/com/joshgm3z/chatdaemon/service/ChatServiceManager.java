@@ -40,7 +40,7 @@ public class ChatServiceManager implements EventListener<QuerySnapshot> {
 
     private void onAppStart() {
         Logger.entryLog();
-        // listenForMessages();
+        listenForMessages();
         Logger.exitLog();
     }
 
@@ -57,6 +57,7 @@ public class ChatServiceManager implements EventListener<QuerySnapshot> {
     @Override
     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
         Logger.entryLog();
+        Logger.log(Log.INFO, "queryDocumentSnapshots.size = [" + queryDocumentSnapshots.size() + "]");
         if (e != null) {
             Logger.log(Log.WARN, "Listening failed.");
             return;
