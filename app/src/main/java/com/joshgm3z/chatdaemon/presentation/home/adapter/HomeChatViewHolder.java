@@ -1,14 +1,18 @@
 package com.joshgm3z.chatdaemon.presentation.home.adapter;
 
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.joshgm3z.chatdaemon.R;
+import com.joshgm3z.chatdaemon.common.data.Chat;
 import com.joshgm3z.chatdaemon.common.data.ChatInfo;
 import com.joshgm3z.chatdaemon.common.utils.DateUtil;
+import com.joshgm3z.chatdaemon.common.utils.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +28,9 @@ public class HomeChatViewHolder extends RecyclerView.ViewHolder implements View.
     @BindView(R.id.tv_date_time)
     TextView mDateTime;
 
+    @BindView(R.id.iv_chat_status)
+    ImageView mIvChatStatus;
+
     private IHomeAdapterCallback mAdapterCallback;
 
     private ChatInfo mChatInfo;
@@ -36,10 +43,27 @@ public class HomeChatViewHolder extends RecyclerView.ViewHolder implements View.
     }
 
     public void setData(ChatInfo chatInfo) {
+        Logger.entryLog();
+        Logger.log(Log.INFO, "chatInfo = [" + chatInfo + "]");
         mChatInfo = chatInfo;
         mTitle.setText(chatInfo.getTitle());
         mSubtitle.setText(chatInfo.getSubTitle());
         mDateTime.setText(DateUtil.getPrettyTime(chatInfo.getDateTime()));
+        int chatStatusRes = -1;
+        if (chatInfo.getStatus() == Chat.Status.SENT) {
+            chatStatusRes = R.drawable.ic_sent;
+        } else if (chatInfo.getStatus() == Chat.Status.DELIVERED) {
+            chatStatusRes = R.drawable.ic_delivered;
+        } else if (chatInfo.getStatus() == Chat.Status.SEEN) {
+            chatStatusRes = R.drawable.ic_seen;
+        }
+        if (chatStatusRes != -1) {
+            mIvChatStatus.setVisibility(View.VISIBLE);
+            mIvChatStatus.setImageResource(chatStatusRes);
+        } else {
+            mIvChatStatus.setVisibility(View.GONE);
+        }
+        Logger.exitLog();
     }
 
     @Override

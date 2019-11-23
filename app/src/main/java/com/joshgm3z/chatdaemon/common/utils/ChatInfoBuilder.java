@@ -32,6 +32,11 @@ public class ChatInfoBuilder {
             chatInfo.setUserId(user.getId());
             chatInfo.setChatType(chatType);
             chatInfo.setDateTime(chat.getTime());
+            if (chatType == Const.ChatType.SENT) {
+                chatInfo.setStatus(chat.getStatus());
+            } else {
+                chatInfo.setStatus(-1);
+            }
 
             chatInfoBuffer.put(user.getId(), chatInfo);
         }
