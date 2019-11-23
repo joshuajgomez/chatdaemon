@@ -14,6 +14,16 @@ public class ChatInfo {
 
     private int mChatType;
 
+    public int getChatCounter() {
+        return mChatCounter;
+    }
+
+    public void setChatCounter(int chatCounter) {
+        mChatCounter = chatCounter;
+    }
+
+    private int mChatCounter = 0;
+
     public ChatInfo() {
     }
 
@@ -26,10 +36,11 @@ public class ChatInfo {
         return "ChatInfo{" +
                 "mTitle='" + mTitle + '\'' +
                 ", mSubTitle='" + mSubTitle + '\'' +
-                ", mDateTime='" + mDateTime + '\'' +
+                ", mDateTime=" + mDateTime +
                 ", mStatus=" + mStatus +
-                ", mUserId=" + mUserId +
+                ", mUserId='" + mUserId + '\'' +
                 ", mChatType=" + mChatType +
+                ", mChatCounter=" + mChatCounter +
                 '}';
     }
 

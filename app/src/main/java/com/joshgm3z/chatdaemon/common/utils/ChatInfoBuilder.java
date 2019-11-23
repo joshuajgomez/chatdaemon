@@ -38,6 +38,16 @@ public class ChatInfoBuilder {
                 chatInfo.setStatus(-1);
             }
 
+            chatInfo.setChatCounter(0);
+            ChatInfo addedChatInfo = chatInfoBuffer.get(user.getId());
+            int chatCounter = 0;
+            if (addedChatInfo != null
+                    && chatType == Const.ChatType.RECEIVED
+                    && chat.getStatus() == Chat.Status.DELIVERED) {
+                chatCounter = addedChatInfo.getChatCounter() + 1;
+            }
+            chatInfo.setChatCounter(chatCounter);
+
             chatInfoBuffer.put(user.getId(), chatInfo);
         }
 

@@ -31,6 +31,9 @@ public class HomeChatViewHolder extends RecyclerView.ViewHolder implements View.
     @BindView(R.id.iv_chat_status)
     ImageView mIvChatStatus;
 
+    @BindView(R.id.tv_counter)
+    TextView mTvCounter;
+
     private IHomeAdapterCallback mAdapterCallback;
 
     private ChatInfo mChatInfo;
@@ -62,6 +65,12 @@ public class HomeChatViewHolder extends RecyclerView.ViewHolder implements View.
             mIvChatStatus.setImageResource(chatStatusRes);
         } else {
             mIvChatStatus.setVisibility(View.GONE);
+        }
+        if (chatInfo.getChatCounter() > 0) {
+            mTvCounter.setVisibility(View.VISIBLE);
+            mTvCounter.setText(chatInfo.getChatCounter() + "");
+        } else {
+            mTvCounter.setVisibility(View.GONE);
         }
         Logger.exitLog();
     }
