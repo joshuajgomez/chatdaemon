@@ -104,7 +104,6 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
 
     @Override
     public void updateChatList(List<ChatInfo> chatInfoList) {
-        Toast.makeText(this, "Chat updated", Toast.LENGTH_SHORT).show();
         mHomeChatAdapter.setChatInfoList(chatInfoList);
     }
 
