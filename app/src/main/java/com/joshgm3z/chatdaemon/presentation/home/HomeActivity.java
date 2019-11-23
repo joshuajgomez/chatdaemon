@@ -93,7 +93,6 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
 
     private void initUI() {
         ButterKnife.bind(this);
-        mTvAppTitle.setText(SharedPrefs.getInstance(this).getUser().getName());
         mIvSearch.setOnClickListener(this);
 
         mHomeChatAdapter = new HomeChatAdapter(this);
