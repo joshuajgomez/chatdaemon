@@ -34,7 +34,7 @@ public class ChatViewHolder extends RecyclerView.ViewHolder {
 
     public void setData(Chat chat) {
         mTvMessage.setText(chat.getMessage());
-        mTvDateTime.setText(DateUtil.getPrettyTime(chat.getTime()));
+        mTvDateTime.setText(DateUtil.getRelativeTime(chat.getTime()));
         int chatStatusRes = -1;
         if (chat.getStatus() == Chat.Status.SENT) {
             chatStatusRes = R.drawable.ic_sent;

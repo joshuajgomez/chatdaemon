@@ -1,6 +1,10 @@
 package com.joshgm3z.chatdaemon.common.utils;
 
+import android.text.format.DateFormat;
+import android.text.format.DateUtils;
+
 import java.util.Calendar;
+import java.util.Date;
 
 public class DateUtil {
 
@@ -111,6 +115,21 @@ public class DateUtil {
                 break;
         }
         return monthText;
+    }
+
+    public static String getRelativeTime(long milliSeconds) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(milliSeconds);
+        String calendarFormatString;
+        if (DateUtils.isToday(milliSeconds)) {
+            // Today. Print only time
+            calendarFormatString = "h:mm aa";
+        } else {
+            // Yesterday or older. Print only date
+            calendarFormatString = "dd/MM/yyyy";
+        }
+        String relativeTime = DateFormat.format(calendarFormatString, calendar) + "";
+        return relativeTime;
     }
 
 }

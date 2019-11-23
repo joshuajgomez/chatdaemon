@@ -51,7 +51,7 @@ public class HomeChatViewHolder extends RecyclerView.ViewHolder implements View.
         mChatInfo = chatInfo;
         mTitle.setText(chatInfo.getTitle());
         mSubtitle.setText(chatInfo.getSubTitle());
-        mDateTime.setText(DateUtil.getPrettyTime(chatInfo.getDateTime()));
+        mDateTime.setText(DateUtil.getRelativeTime(chatInfo.getDateTime()));
         int chatStatusRes = -1;
         if (chatInfo.getStatus() == Chat.Status.SENT) {
             chatStatusRes = R.drawable.ic_sent;
