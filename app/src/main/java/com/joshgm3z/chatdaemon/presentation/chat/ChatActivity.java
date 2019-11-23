@@ -6,9 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.joshgm3z.chatdaemon.R;
 import com.joshgm3z.chatdaemon.common.data.Chat;
+import com.joshgm3z.chatdaemon.common.database.AppDatabase;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 import com.joshgm3z.chatdaemon.presentation.chat.adapter.ChatAdapter;
 
@@ -32,11 +32,17 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
     @BindView(R.id.rv_chat_list)
     RecyclerView mRecyclerView;
 
-    @BindView(R.id.bt_send)
-    Button mBtSend;
+    @BindView(R.id.iv_send)
+    ImageView mIvSend;
 
     @BindView(R.id.et_message)
     EditText mEtMessage;
+
+    @BindView(R.id.tv_user)
+    TextView mTvUser;
+
+    @BindView(R.id.iv_go_back)
+    ImageView mIvGoBack;
 
     private ChatAdapter mChatAdapter;
 
@@ -51,14 +57,17 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
         String userId = intent.getStringExtra(USER_ID);
 
         mChatPresenter = new ChatPresenter(this, userId);
+        String userName = AppDatabase.getInstance(this).mUserDao().getUser(userId).getName();
 
-        initUI();
+        initUI(userName);
     }
 
-    private void initUI() {
+    private void initUI(String userName) {
         ButterKnife.bind(this);
-        mBtSend.setOnClickListener(this);
+        mIvSend.setOnClickListener(this);
         mEtMessage.setOnKeyListener(this);
+        mTvUser.setText(userName);
+        mIvGoBack.setOnClickListener(this);
 
         mChatAdapter = new ChatAdapter();
         mRecyclerView.setAdapter(mChatAdapter);
@@ -82,7 +91,21 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
     @Override
     public void onClick(View view) {
         Logger.entryLog();
-        readMessage();
+        switch (view.getId()) {
+            case R.id.iv_go_back:
+                // Close activity
+                finish();
+                break;
+
+            case R.id.iv_send:
+                // Send message
+                readMessage();
+                break;
+
+            default:
+                Logger.log(Log.WARN, "Unhandled click event");
+                break;
+        }
         Logger.exitLog();
     }
 

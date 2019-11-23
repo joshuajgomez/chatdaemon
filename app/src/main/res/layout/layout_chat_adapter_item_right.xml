@@ -2,54 +2,56 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="120dp"
+    android:paddingLeft="120dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="15dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginBottom="15dp"
         android:background="@drawable/layout_rounded_grey"
         android:orientation="vertical"
         android:padding="5dp">
 
         <TextView
-            android:gravity="end"
             android:id="@+id/tv_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="5dp"
+            android:gravity="end"
             android:text="Message"
             android:textAlignment="textEnd"
             android:textColor="@color/black"
             android:textSize="17sp" />
 
         <LinearLayout
-            android:layout_marginStart="30dp"
-            android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="12dp"
             android:orientation="horizontal">
 
             <TextView
+                android:layout_gravity="center"
                 android:id="@+id/tv_date_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 android:text="01/12/1994"
-                android:textColor="@color/black"
+                android:textColor="@color/dark_grey"
                 android:textSize="10sp" />
 
             <ImageView
                 android:id="@+id/iv_chat_status"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginEnd="15dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginEnd="5dp"
                 android:src="@drawable/ic_seen" />
 
         </LinearLayout>

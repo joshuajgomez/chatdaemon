@@ -13,12 +13,11 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="@color/white"
+            android:layout_height="70dp"
             android:paddingLeft="25dp"
             android:paddingTop="15dp"
             android:paddingRight="25dp"
-            android:paddingBottom="15dp">
+            android:paddingBottom="0dp">
 
             <TextView
                 android:id="@+id/tv_app_title"
@@ -26,9 +25,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:layout_gravity="center"
+                android:layout_marginStart="5dp"
                 android:text="@string/string_app_title"
-                android:textColor="@color/black"
+                android:textColor="@color/off_black"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
@@ -48,6 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical" />
+
 
     </LinearLayout>
 
