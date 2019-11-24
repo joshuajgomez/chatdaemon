@@ -1,16 +1,21 @@
 package com.joshgm3z.chatdaemon.presentation.home;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,6 +41,7 @@ import butterknife.ButterKnife;
 
 public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeAdapterCallback, View.OnClickListener, ISearchFragmentCallback {
 
+    private static final int PERMISSION_REQUEST_READ_CONTACTS = 100;
     @BindView(R.id.rv_home_chat_list)
     RecyclerView mRecyclerView;
 
@@ -57,29 +63,82 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
         Logger.entryLog();
         setContentView(R.layout.activity_home);
 
-        ContactFetcher contactFetcher = new ContactFetcher(this);
-        contactFetcher.fetch();
-
         if (!SharedPrefs.getInstance(this).isUserRegistered()) {
+            // New user. goto register screen.
             ActivityCompat.finishAffinity(this);
             RegisterActivity.startActivity(this);
+        } else if (isPermissionGranted()) {
+            // Sufficient permission granted.
+            initHomeScreen();
         } else {
-            String userId;
-            if (getIntent().hasExtra(USER_ID)) {
-                Logger.log(Log.INFO, "User found in intent");
-                userId = getIntent().getStringExtra(USER_ID);
-            } else {
-                Logger.log(Log.INFO, "User found in shared prefs");
-                userId = SharedPrefs.getInstance(this).getUser().getId();
-            }
-            Logger.log(Log.INFO, "userId = [" + userId + "]");
-            mHomePresenter = new HomePresenter(this, userId);
-            Intent intent = new Intent(this, ChatService.class);
-            startService(intent);
-
-            initUI();
+            // No permission.
+            askPermission();
         }
         Logger.exitLog();
+    }
+
+    private void askPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},
+                PERMISSION_REQUEST_READ_CONTACTS);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_READ_CONTACTS: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted
+                    initHomeScreen();
+                } else {
+                    // Permission denied. Show error
+                    showPermissionError();
+                }
+                return;
+            }
+        }
+    }
+
+    private void showPermissionError() {
+        new AlertDialog.Builder(this)
+                .setTitle("Permission denied")
+                .setMessage("Please grant permission to read contacts")
+                .setPositiveButton("Ask again", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        askPermission();
+                    }
+                })
+                .setNegativeButton("Close app", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ActivityCompat.finishAffinity(HomeActivity.this);
+                    }
+                })
+                .show();
+    }
+
+    private void initHomeScreen() {
+        String userId;
+        ContactFetcher contactFetcher = new ContactFetcher(this);
+        contactFetcher.fetch();
+        if (getIntent().hasExtra(USER_ID)) {
+            Logger.log(Log.INFO, "User found in intent");
+            userId = getIntent().getStringExtra(USER_ID);
+        } else {
+            Logger.log(Log.INFO, "User found in shared prefs");
+            userId = SharedPrefs.getInstance(this).getUser().getId();
+        }
+        Logger.log(Log.INFO, "userId = [" + userId + "]");
+        mHomePresenter = new HomePresenter(this, userId);
+        Intent intent = new Intent(this, ChatService.class);
+        startService(intent);
+
+        initUI();
+    }
+
+    private boolean isPermissionGranted() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
+                == PackageManager.PERMISSION_GRANTED;
     }
 
     private void initUI() {

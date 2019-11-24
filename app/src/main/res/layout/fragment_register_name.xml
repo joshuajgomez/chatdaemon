@@ -8,30 +8,60 @@
     tools:context=".presentation.register.name.RegisterNameFragment">
 
     <LinearLayout
-        android:padding="30dp"
-        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="30dp">
+
+
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter name" />
+            android:text="Almost there"
+            android:textAlignment="center"
+            android:textColor="@color/green"
+            android:textSize="50sp"
+            android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/et_name"
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:text="@string/enter_phone_name"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:hint="Type name..." />
+            android:layout_marginTop="30dp">
+
+
+            <EditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/layout_rounded_grey_text_box"
+                android:hint="Type here..."
+                android:padding="10dp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
 
         <Button
             android:id="@+id/bt_sign_up"
-            android:layout_width="wrap_content"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="Sign up" />
+            android:layout_marginTop="60dp"
+            android:text="Sign up"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
