@@ -95,6 +95,7 @@ public class RegisterModel implements IRegisterModel {
                                 // User registered
                                 DocumentSnapshot documentSnapshot = result.getDocuments().get(0);
                                 User user = PojoBuilder.getUser(documentSnapshot);
+                                SharedPrefs.getInstance(mContext).setUser(user);
                                 mRegisterPresenter.userFound(user);
 
                             } else {

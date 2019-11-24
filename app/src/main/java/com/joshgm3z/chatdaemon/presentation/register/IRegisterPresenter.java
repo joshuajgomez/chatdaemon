@@ -13,4 +13,6 @@ public interface IRegisterPresenter {
     void newUser(String phoneNumber);
 
     void onUserAdded(User user);
+
+    void contactFetchComplete();
 }

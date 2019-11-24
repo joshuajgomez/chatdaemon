@@ -8,4 +8,8 @@ public interface IRegisterView {
 
     void showRegisterNameScreen(String phoneNumber);
 
+    void showLoadingScreen(String userName);
+
+    void checkPermission();
+
 }

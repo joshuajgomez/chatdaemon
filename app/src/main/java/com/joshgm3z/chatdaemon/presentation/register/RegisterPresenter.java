@@ -15,6 +15,8 @@ public class RegisterPresenter implements IRegisterPresenter {
 
     private Context mContext;
 
+    private User mUser;
+
     public RegisterPresenter(RegisterActivity activity) {
         Logger.entryLog();
         mRegisterView = (IRegisterView) activity;
@@ -41,8 +43,7 @@ public class RegisterPresenter implements IRegisterPresenter {
     public void userFound(User user) {
         Logger.entryLog();
         Logger.log(Log.INFO, "user = [" + user + "]");
-        SharedPrefs.getInstance(mContext).setUser(user);
-        mRegisterView.gotoHomeScreen(user);
+        proceedUser(user);
         Logger.exitLog();
     }
 
@@ -57,7 +58,21 @@ public class RegisterPresenter implements IRegisterPresenter {
     @Override
     public void onUserAdded(User user) {
         Logger.entryLog();
-        mRegisterView.gotoHomeScreen(user);
+        proceedUser(user);
         Logger.exitLog();
     }
+
+    private void proceedUser(User user) {
+        mUser = user;
+        Logger.entryLog();
+        mRegisterView.showLoadingScreen(user.getName());
+        mRegisterView.checkPermission();
+        Logger.exitLog();
+    }
+
+    @Override
+    public void contactFetchComplete() {
+        mRegisterView.gotoHomeScreen(mUser);
+    }
+
 }

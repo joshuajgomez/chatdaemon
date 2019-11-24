@@ -1,5 +1,6 @@
 package com.joshgm3z.chatdaemon.common.utils;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,7 +19,6 @@ import com.joshgm3z.chatdaemon.common.Const;
 import com.joshgm3z.chatdaemon.common.database.AppDatabase;
 import com.joshgm3z.chatdaemon.common.database.dao.UserDao;
 import com.joshgm3z.chatdaemon.common.database.entity.User;
-import com.joshgm3z.chatdaemon.presentation.home.HomeActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +33,16 @@ public class ContactFetcher {
 
     private List<User> mUserList;
 
-    public ContactFetcher(HomeActivity activity) {
+    private ContactFetcherCallback mContactFetcherCallback;
+
+    private int mCounter = 0;
+
+    private int mMaxCounter = 0;
+
+    public ContactFetcher(Activity activity) {
         mContext = activity.getApplicationContext();
         mContentResolver = activity.getContentResolver();
+        mContactFetcherCallback = (ContactFetcherCallback) activity;
         mFirebaseFirestore = FirebaseFirestore.getInstance();
     }
 
@@ -63,7 +70,19 @@ public class ContactFetcher {
         }
         contacts.close();
 
-        fetchUserIds(userList);
+        fetchUserList(userList);
+    }
+
+    private void fetchUserList(List<User> userList) {
+        mUserList = new ArrayList<>();
+        mCounter = userList.size();
+        mMaxCounter = userList.size();
+        if (mCounter == 0) {
+            mContactFetcherCallback.onComplete();
+        }
+        for (User user : userList) {
+            fetchUser(user.getPhoneNumber());
+        }
     }
 
     public static String formatPhoneNumber(String phoneNumber) {
@@ -82,15 +101,8 @@ public class ContactFetcher {
         return phoneNumber;
     }
 
-    private void fetchUserIds(List<User> userList) {
-        mUserList = new ArrayList<>();
-        for (User user : userList) {
-            fetchUser(user.getPhoneNumber());
-        }
-    }
-
     private void fetchUser(String phoneNumber) {
-        Logger.log(Log.INFO, "phoneNumber = [" + phoneNumber + "]");
+        Logger.log(Log.INFO, "mCounter = [" + mCounter + "], phoneNumber = [" + phoneNumber + "]");
         mFirebaseFirestore.collection(Const.DbCollections.USERS)
                 .whereEqualTo(Const.DbFields.User.PHONE_NUMBER, phoneNumber)
                 .get()
@@ -114,7 +126,15 @@ public class ContactFetcher {
                             // Task failed
                             Logger.exceptionLog(task.getException());
                         }
+                        --mCounter;
+                        Logger.log(Log.INFO, "mCounter = [" + mCounter + "]");
+                        if (mCounter == 0) {
+                            mContactFetcherCallback.onComplete();
+                        } else {
+                            mContactFetcherCallback.progressUpdate(getProgress(mCounter));
+                        }
                     }
+
                 });
     }
 
@@ -135,5 +155,19 @@ public class ContactFetcher {
         }.execute(user);
     }
 
+    public int getProgress(int counter) {
+        float max = mMaxCounter;
+        float current = counter;
+        float i = current / max;
+        float progress = i * 100;
+        return 100 - (int) progress;
+    }
+
+    public interface ContactFetcherCallback {
+
+        void onComplete();
+
+        void progressUpdate(int progress);
+    }
 
 }

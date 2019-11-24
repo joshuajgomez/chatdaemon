@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -39,7 +38,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeAdapterCallback, View.OnClickListener, ISearchFragmentCallback {
+public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeAdapterCallback, View.OnClickListener, ISearchFragmentCallback, ContactFetcher.ContactFetcherCallback {
 
     private static final int PERMISSION_REQUEST_READ_CONTACTS = 100;
     @BindView(R.id.rv_home_chat_list)
@@ -119,8 +118,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
 
     private void initHomeScreen() {
         String userId;
-        ContactFetcher contactFetcher = new ContactFetcher(this);
-        contactFetcher.fetch();
+
         if (getIntent().hasExtra(USER_ID)) {
             Logger.log(Log.INFO, "User found in intent");
             userId = getIntent().getStringExtra(USER_ID);
@@ -150,6 +148,9 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mHomePresenter.onAppStart();
+
+        ContactFetcher contactFetcher = new ContactFetcher(this);
+        contactFetcher.fetch();
     }
 
     @Override
@@ -185,4 +186,16 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
         ChatActivity.startActivity(this, userId);
     }
 
+    @Override
+    public void onComplete() {
+        Logger.log(Log.INFO, "Contact fetch complete");
+        if (mHomePresenter != null) {
+            mHomePresenter.onAppStart();
+        }
+    }
+
+    @Override
+    public void progressUpdate(int progress) {
+        Logger.log(Log.INFO, "progress = [" + progress + "]");
+    }
 }
