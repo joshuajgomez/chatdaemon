@@ -25,7 +25,7 @@ import java.util.List;
 
 public class ContactFetcher {
 
-    private final Context mContext;
+    private Context mContext;
 
     private ContentResolver mContentResolver;
 
@@ -39,6 +39,9 @@ public class ContactFetcher {
         mFirebaseFirestore = FirebaseFirestore.getInstance();
     }
 
+    public ContactFetcher() {
+    }
+
     public void fetch() {
         List<User> userList = new ArrayList<>();
         Cursor contacts = mContentResolver.query(
@@ -47,17 +50,34 @@ public class ContactFetcher {
 
             String name = contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            phoneNumber = phoneNumber.replaceAll("\\s+","");
+            String formattedPhoneNumber = formatPhoneNumber(phoneNumber);
 
-            User user = new User();
-            user.setName(name);
-            user.setPhoneNumber(phoneNumber);
-
-            userList.add(user);
+            if (formattedPhoneNumber != null) {
+                User user = new User();
+                user.setName(name);
+                user.setPhoneNumber(formattedPhoneNumber);
+                userList.add(user);
+            } else {
+                Logger.log(Log.WARN, "Invalid phone number: " + phoneNumber);
+            }
         }
         contacts.close();
 
         fetchUserIds(userList);
+    }
+
+    public String formatPhoneNumber(String phoneNumber) {
+        phoneNumber = phoneNumber.replaceAll("\\s+", "");
+        phoneNumber = phoneNumber.replaceAll("-", "");
+        phoneNumber = phoneNumber.replaceAll("\\+", "");
+        int endIndex = phoneNumber.length();
+        int startIndex = endIndex - 10;
+        if (startIndex < 0) {
+            phoneNumber = null;
+        } else {
+            phoneNumber = phoneNumber.substring(startIndex, endIndex);
+        }
+        return phoneNumber;
     }
 
     private void fetchUserIds(List<User> userList) {

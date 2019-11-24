@@ -1,6 +1,10 @@
 <resources>
+
     <string name="app_name">ChatDaemon</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="string_app_title">#talksy</string>
+    <string name="string_app_title">#talky</string>
+    <string name="welcome_message">Welcome to #talky</string>
+    <string name="enter_phone_number">Please enter your phone number</string>
+    <string name="phone_number_prefix">+91</string>
 </resources>
