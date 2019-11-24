@@ -50,7 +50,7 @@ public class ContactFetcher {
 
             String name = contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            String formattedPhoneNumber = formatPhoneNumber(phoneNumber);
+            String formattedPhoneNumber = ContactFetcher.formatPhoneNumber(phoneNumber);
 
             if (formattedPhoneNumber != null) {
                 User user = new User();
@@ -66,10 +66,12 @@ public class ContactFetcher {
         fetchUserIds(userList);
     }
 
-    public String formatPhoneNumber(String phoneNumber) {
+    public static String formatPhoneNumber(String phoneNumber) {
         phoneNumber = phoneNumber.replaceAll("\\s+", "");
         phoneNumber = phoneNumber.replaceAll("-", "");
         phoneNumber = phoneNumber.replaceAll("\\+", "");
+        phoneNumber = phoneNumber.replaceAll("\\(", "");
+        phoneNumber = phoneNumber.replaceAll("\\)", "");
         int endIndex = phoneNumber.length();
         int startIndex = endIndex - 10;
         if (startIndex < 0) {

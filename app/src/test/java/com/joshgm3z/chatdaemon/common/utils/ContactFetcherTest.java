@@ -16,10 +16,12 @@ public class ContactFetcherTest {
         String phoneNumber3 = "974-236-5102";
         String phoneNumber4 = "9847144525";
         String phoneNumber5 = "123";
+        String phoneNumber6 = "(944) 652-0994";
         assertEquals(10, new ContactFetcher().formatPhoneNumber(phoneNumber1).length());
         assertEquals(10, new ContactFetcher().formatPhoneNumber(phoneNumber2).length());
         assertEquals(10, new ContactFetcher().formatPhoneNumber(phoneNumber3).length());
         assertEquals(10, new ContactFetcher().formatPhoneNumber(phoneNumber4).length());
         assertNull(new ContactFetcher().formatPhoneNumber(phoneNumber5));
+        assertEquals(10, new ContactFetcher().formatPhoneNumber(phoneNumber6).length());
     }
 }

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import androidx.fragment.app.Fragment;
 
 import com.joshgm3z.chatdaemon.R;
+import com.joshgm3z.chatdaemon.common.utils.ContactFetcher;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 
 import butterknife.BindView;
@@ -82,8 +83,10 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
         String phoneNumber = mEtPhoneNumber.getText().toString();
         if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
             phoneNumber = phoneNumber.trim();
-            // mPhonePresenter.onContinueButtonClick(phoneNumber);
-            mRegisterPhoneListener.onPhoneNumberEntered(phoneNumber);
+            phoneNumber = ContactFetcher.formatPhoneNumber(phoneNumber);
+            if (phoneNumber != null) {
+                mRegisterPhoneListener.onPhoneNumberEntered(phoneNumber);
+            }
         }
         Logger.exitLog();
     }

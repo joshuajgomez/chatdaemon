@@ -60,33 +60,24 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
         ContactFetcher contactFetcher = new ContactFetcher(this);
         contactFetcher.fetch();
 
-        checkRegisterStatus();
-
-        String userId;
-
-        if (getIntent().hasExtra(USER_ID)) {
-            Logger.log(Log.INFO, "User found in intent");
-            userId = getIntent().getStringExtra(USER_ID);
-        } else {
-            Logger.log(Log.INFO, "User found in shared prefs");
-            userId = SharedPrefs.getInstance(this).getUser().getId();
-        }
-
-        Logger.log(Log.INFO, "userId = [" + userId + "]");
-        mHomePresenter = new HomePresenter(this, userId);
-        Intent intent = new Intent(this, ChatService.class);
-        startService(intent);
-
-        initUI();
-        Logger.exitLog();
-    }
-
-    private void checkRegisterStatus() {
-        Logger.entryLog();
-        Logger.log(Log.INFO, "Checking if user is new");
         if (!SharedPrefs.getInstance(this).isUserRegistered()) {
             ActivityCompat.finishAffinity(this);
             RegisterActivity.startActivity(this);
+        } else {
+            String userId;
+            if (getIntent().hasExtra(USER_ID)) {
+                Logger.log(Log.INFO, "User found in intent");
+                userId = getIntent().getStringExtra(USER_ID);
+            } else {
+                Logger.log(Log.INFO, "User found in shared prefs");
+                userId = SharedPrefs.getInstance(this).getUser().getId();
+            }
+            Logger.log(Log.INFO, "userId = [" + userId + "]");
+            mHomePresenter = new HomePresenter(this, userId);
+            Intent intent = new Intent(this, ChatService.class);
+            startService(intent);
+
+            initUI();
         }
         Logger.exitLog();
     }
