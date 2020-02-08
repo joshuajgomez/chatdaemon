@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,8 +42,8 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
     @BindView(R.id.tv_user)
     TextView mTvUser;
 
-    @BindView(R.id.iv_go_back)
-    ImageView mIvGoBack;
+    @BindView(R.id.ll_back_container)
+    LinearLayout mIvGoBack;
 
     private ChatAdapter mChatAdapter;
 
@@ -92,7 +93,7 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
     public void onClick(View view) {
         Logger.entryLog();
         switch (view.getId()) {
-            case R.id.iv_go_back:
+            case R.id.ll_back_container:
                 // Close activity
                 finish();
                 break;

@@ -12,4 +12,6 @@
     <attr name="colorButtonBackground" format="color" />
     <attr name="colorButtonText" format="color" />
 
+    <attr name="imageDefaultUser" format="reference"/>
+
 </resources>

@@ -17,6 +17,8 @@
         <item name="colorProgressBar">@color/white</item>
         <item name="colorButtonBackground">@color/black</item>
         <item name="colorButtonText">@color/green</item>
+
+        <item name="imageDefaultUser">@mipmap/ic_user_blue</item>
     </style>
 
 </resources>
