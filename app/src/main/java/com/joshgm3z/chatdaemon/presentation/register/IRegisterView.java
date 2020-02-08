@@ -12,4 +12,9 @@ public interface IRegisterView {
 
     void checkPermission();
 
+    void showLoadingMask(String loadingMessage);
+
+    void hideLoadingMask();
+
+    void showErrorMessage(String message);
 }

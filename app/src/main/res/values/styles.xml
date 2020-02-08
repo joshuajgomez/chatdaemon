@@ -8,4 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="GreenTheme" parent="AppTheme">
+        <item name="colorBackgroundPrimary">@color/green</item>
+        <item name="colorAccent">@color/black</item>
+        <item name="colorTextPrimary">@color/white</item>
+        <item name="colorTextSecondary">@color/black</item>
+        <item name="colorTextButton">@color/green</item>
+    </style>
+
+    <style name="BlueTheme" parent="AppTheme">
+        <item name="colorBackgroundPrimary">@color/green</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="colorTextPrimary">@color/white</item>
+        <item name="colorTextSecondary">@color/black</item>
+        <item name="colorTextButton">@color/green</item>
+    </style>
+
 </resources>

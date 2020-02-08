@@ -106,7 +106,9 @@ public class RegisterModel implements IRegisterModel {
                             }
                         } else {
                             // Task failed
-                            Logger.exceptionLog(task.getException());
+                            Exception exception = task.getException();
+                            Logger.exceptionLog(exception);
+                            mRegisterPresenter.onErrorCheckingUser(exception.getMessage());
                         }
                     }
                 });

@@ -36,6 +36,7 @@ public class RegisterPresenter implements IRegisterPresenter {
     public void onPhoneNumberEntered(String phoneNumber) {
         Logger.entryLog();
         mRegisterModel.checkUser(phoneNumber);
+        mRegisterView.showLoadingMask("Checking phone number");
         Logger.exitLog();
     }
 
@@ -43,6 +44,7 @@ public class RegisterPresenter implements IRegisterPresenter {
     public void userFound(User user) {
         Logger.entryLog();
         Logger.log(Log.INFO, "user = [" + user + "]");
+        mRegisterView.hideLoadingMask();
         proceedUser(user);
         Logger.exitLog();
     }
@@ -51,6 +53,7 @@ public class RegisterPresenter implements IRegisterPresenter {
     public void newUser(String phoneNumber) {
         Logger.entryLog();
         Logger.log(Log.INFO, "phoneNumber = [" + phoneNumber + "]");
+        mRegisterView.hideLoadingMask();
         mRegisterView.showRegisterNameScreen(phoneNumber);
         Logger.exitLog();
     }
@@ -73,6 +76,13 @@ public class RegisterPresenter implements IRegisterPresenter {
     @Override
     public void contactFetchComplete() {
         mRegisterView.gotoHomeScreen(mUser);
+    }
+
+    @Override
+    public void onErrorCheckingUser(String message) {
+        Logger.log(Log.INFO, "message = [" + message + "]");
+        mRegisterView.hideLoadingMask();
+        mRegisterView.showErrorMessage(message);
     }
 
 }

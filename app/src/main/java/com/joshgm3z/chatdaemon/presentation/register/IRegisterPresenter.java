@@ -15,4 +15,6 @@ public interface IRegisterPresenter {
     void onUserAdded(User user);
 
     void contactFetchComplete();
+
+    void onErrorCheckingUser(String message);
 }

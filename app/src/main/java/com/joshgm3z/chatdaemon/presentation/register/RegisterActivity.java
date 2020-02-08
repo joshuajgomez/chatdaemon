@@ -21,6 +21,7 @@ import com.joshgm3z.chatdaemon.common.database.entity.User;
 import com.joshgm3z.chatdaemon.common.utils.ContactFetcher;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 import com.joshgm3z.chatdaemon.presentation.home.HomeActivity;
+import com.joshgm3z.chatdaemon.presentation.register.loading.LoadingFragment;
 import com.joshgm3z.chatdaemon.presentation.register.name.RegisterNameFragment;
 import com.joshgm3z.chatdaemon.presentation.register.phoneNumber.IRegisterFragmentListener;
 import com.joshgm3z.chatdaemon.presentation.register.phoneNumber.RegisterPhoneFragment;
@@ -30,6 +31,8 @@ import com.joshgm3z.chatdaemon.presentation.register.welcome.RegisterCompleteFra
 public class RegisterActivity extends AppCompatActivity implements IRegisterView, IRegisterFragmentListener, ContactFetcher.ContactFetcherCallback {
 
     private static final int PERMISSION_REQUEST_READ_CONTACTS = 100;
+
+    private static final String TAG_LOADING_FRAGMENT = "TAG_LOADING_FRAGMENT";
 
     private IRegisterPresenter mRegisterPresenter;
 
@@ -71,6 +74,43 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterView
         Logger.log(Log.INFO, "phoneNumber = [" + phoneNumber + "]");
         mRegisterPresenter.onPhoneNumberEntered(phoneNumber);
         Logger.exitLog();
+    }
+
+    @Override
+    public void showLoadingMask(String loadingMessage) {
+        Logger.entryLog();
+        Fragment loadingFragment = LoadingFragment.newInstance(loadingMessage);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fragment_register_phone, loadingFragment, TAG_LOADING_FRAGMENT).commit();
+        Logger.exitLog();
+    }
+
+    @Override
+    public void hideLoadingMask() {
+        Logger.entryLog();
+        Fragment loadingFragment = getSupportFragmentManager().findFragmentByTag(TAG_LOADING_FRAGMENT);
+        if (loadingFragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .remove(loadingFragment)
+                    .commit();
+        } else {
+            Logger.log(Log.WARN, "loadingFragment is null");
+        }
+        Logger.exitLog();
+    }
+
+    @Override
+    public void showErrorMessage(String message) {
+        new AlertDialog.Builder(this)
+                .setTitle("Error checking user")
+                .setMessage(message)
+                .setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }})
+                .show();
     }
 
     @Override
