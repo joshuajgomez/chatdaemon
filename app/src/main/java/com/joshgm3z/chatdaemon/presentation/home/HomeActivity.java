@@ -41,6 +41,7 @@ import butterknife.ButterKnife;
 public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeAdapterCallback, View.OnClickListener, ISearchFragmentCallback, ContactFetcher.ContactFetcherCallback {
 
     private static final int PERMISSION_REQUEST_READ_CONTACTS = 100;
+
     @BindView(R.id.rv_home_chat_list)
     RecyclerView mRecyclerView;
 
@@ -117,6 +118,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
     }
 
     private void initHomeScreen() {
+        Logger.log(Log.INFO, "Init home screen");
         String userId;
 
         if (getIntent().hasExtra(USER_ID)) {
@@ -155,6 +157,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
 
     @Override
     public void updateChatList(List<ChatInfo> chatInfoList) {
+        Logger.log(Log.INFO, "update chat list");
         mHomeChatAdapter.setChatInfoList(chatInfoList);
     }
 

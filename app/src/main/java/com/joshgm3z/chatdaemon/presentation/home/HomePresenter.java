@@ -24,6 +24,7 @@ public class HomePresenter implements IHomePresenter {
 
     @Override
     public void onAppStart() {
+        Logger.log(Log.INFO, "home app started");
         mHomeModel.listenForMessages();
     }
 
