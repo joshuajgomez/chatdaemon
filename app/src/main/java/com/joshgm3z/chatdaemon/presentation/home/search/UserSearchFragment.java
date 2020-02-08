@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,13 +26,16 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class UserSearchFragment extends Fragment implements IUserSearchView, ISearchListCallback {
+public class UserSearchFragment extends Fragment implements IUserSearchView, ISearchListCallback, View.OnClickListener {
 
     @BindView(R.id.rv_search_list)
     RecyclerView mSearchRecyclerView;
 
     @BindView(R.id.et_search_input)
     EditText mEtSearchInput;
+
+    @BindView(R.id.iv_back_arrow)
+    ImageView mIvBackArrow;
 
     private ISearchFragmentCallback mFragmentCallback;
 
@@ -59,6 +63,7 @@ public class UserSearchFragment extends Fragment implements IUserSearchView, ISe
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_search, container, false);
         ButterKnife.bind(this, view);
+        mIvBackArrow.setOnClickListener(this);
         return view;
     }
 
@@ -94,5 +99,10 @@ public class UserSearchFragment extends Fragment implements IUserSearchView, ISe
     public void onUserClick(String userId) {
         Logger.log(Log.INFO, "userId = [" + userId + "]");
         mFragmentCallback.onUserClick(userId);
+    }
+
+    @Override
+    public void onClick(View view) {
+        getFragmentManager().beginTransaction().remove(this).commit();
     }
 }
