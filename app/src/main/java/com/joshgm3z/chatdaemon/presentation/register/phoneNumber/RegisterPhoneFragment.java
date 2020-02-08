@@ -6,8 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 
 import androidx.fragment.app.Fragment;
@@ -22,10 +23,10 @@ import butterknife.ButterKnife;
 public class RegisterPhoneFragment extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.et_phone_number)
-    public EditText mEtPhoneNumber;
+    EditText mEtPhoneNumber;
 
-    @BindView(R.id.bt_continue)
-    public Button mBtContinue;
+    @BindView(R.id.ll_continue_button)
+    LinearLayout mBtContinue;
 
     private IRegisterFragmentListener mRegisterPhoneListener;
 
@@ -87,6 +88,8 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
             if (phoneNumber != null) {
                 mRegisterPhoneListener.onPhoneNumberEntered(phoneNumber);
             }
+        } else {
+            Toast.makeText(getContext(), "Please enter your phone number", Toast.LENGTH_SHORT).show();
         }
         Logger.exitLog();
     }

@@ -9,7 +9,7 @@
     tools:context=".presentation.register.loading.LoadingFragment">
 
     <ProgressBar
-        android:indeterminateTint="?attr/colorAccent"
+        android:indeterminateTint="?attr/colorProgressBar"
         android:layout_width="100dp"
         android:layout_height="100dp" />
 

@@ -2,8 +2,13 @@
 <resources>
 
     <attr name="colorBackgroundPrimary" format="color" />
+
     <attr name="colorTextPrimary" format="color" />
     <attr name="colorTextSecondary" format="color" />
-    <attr name="colorTextButton" format="color" />
+
+    <attr name="colorProgressBar" format="color" />
+
+    <attr name="colorButtonBackground" format="color" />
+    <attr name="colorButtonText" format="color" />
 
 </resources>

@@ -6,8 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
 
@@ -23,8 +23,8 @@ public class RegisterNameFragment extends Fragment implements View.OnClickListen
     @BindView(R.id.et_name)
     EditText mEtName;
 
-    @BindView(R.id.bt_sign_up)
-    Button mBtSignup;
+    @BindView(R.id.ll_signup_button)
+    LinearLayout mBtSignup;
 
     private IRegisterFragmentListener mRegisterNameListener;
 
