@@ -10,6 +10,7 @@
 
     <style name="GreenTheme" parent="AppTheme">
         <item name="colorBackgroundPrimary">@color/green</item>
+        <item name="colorBackgroundSecondary">@color/white</item>
         <item name="colorAccent">@color/black</item>
         <item name="colorTextPrimary">@color/white</item>
         <item name="colorTextSecondary">@color/black</item>

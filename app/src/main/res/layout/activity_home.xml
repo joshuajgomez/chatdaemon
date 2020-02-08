@@ -3,18 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fl_home"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".presentation.home.HomeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".presentation.home.HomeActivity">
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:paddingLeft="25dp"
+            android:background="@drawable/layout_with_shadow"
+            android:paddingLeft="16dp"
             android:paddingTop="15dp"
             android:paddingRight="25dp"
             android:paddingBottom="0dp">
@@ -25,9 +26,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="5dp"
                 android:text="@string/string_app_title"
-                android:textColor="@color/off_black"
+                android:textColor="?attr/colorTextSecondary"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
@@ -38,7 +38,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:padding="3dp"
-                android:src="@drawable/ic_search_dark" />
+                android:src="@drawable/ic_search" />
 
         </RelativeLayout>
 
