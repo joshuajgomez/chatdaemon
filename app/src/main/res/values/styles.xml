@@ -19,6 +19,8 @@
         <item name="colorButtonText">@color/green</item>
 
         <item name="imageDefaultUser">@mipmap/ic_user_blue</item>
+
+        <item name="actionBarHeight">60dp</item>
     </style>
 
 </resources>

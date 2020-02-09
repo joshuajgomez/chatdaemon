@@ -2,10 +2,12 @@ package com.joshgm3z.chatdaemon.presentation.home.search;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -71,6 +73,22 @@ public class UserSearchFragment extends Fragment implements IUserSearchView, ISe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mUserSearchModel.getUserList();
+        mEtSearchInput.requestFocus();
+        showKeyboard();
+    }
+
+    public void showKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        View v = getActivity().getCurrentFocus();
+        if (v != null)
+            imm.showSoftInput(v, 0);
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        View v = getActivity().getCurrentFocus();
+        if (v != null)
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     @Override
@@ -80,11 +98,6 @@ public class UserSearchFragment extends Fragment implements IUserSearchView, ISe
             mFragmentCallback = (ISearchFragmentCallback) getActivity();
         }
         mUserSearchModel = new UserSearchModel(this);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     @Override
@@ -98,11 +111,13 @@ public class UserSearchFragment extends Fragment implements IUserSearchView, ISe
     @Override
     public void onUserClick(String userId) {
         Logger.log(Log.INFO, "userId = [" + userId + "]");
+        hideKeyboard();
         mFragmentCallback.onUserClick(userId);
     }
 
     @Override
     public void onClick(View view) {
+        hideKeyboard();
         getFragmentManager().beginTransaction().remove(this).commit();
     }
 }

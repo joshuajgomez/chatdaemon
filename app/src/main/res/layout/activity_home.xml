@@ -13,12 +13,10 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="?attr/actionBarHeight"
             android:background="@drawable/layout_with_shadow"
             android:paddingLeft="16dp"
-            android:paddingTop="15dp"
-            android:paddingRight="25dp"
-            android:paddingBottom="0dp">
+            android:paddingRight="25dp">
 
             <TextView
                 android:id="@+id/tv_app_title"

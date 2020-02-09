@@ -14,7 +14,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarHeight"
             android:background="@drawable/layout_with_shadow_white"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"

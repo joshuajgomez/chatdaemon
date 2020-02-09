@@ -14,4 +14,6 @@
 
     <attr name="imageDefaultUser" format="reference"/>
 
+    <attr name="actionBarHeight" format="dimension"/>
+
 </resources>
