@@ -26,7 +26,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ChatActivity extends AppCompatActivity implements IChatView, View.OnClickListener, View.OnKeyListener {
+public class ChatActivity extends AppCompatActivity implements IChatView, View.OnClickListener, View.OnKeyListener, View.OnLayoutChangeListener {
 
     private IChatPresenter mChatPresenter;
 
@@ -73,6 +73,8 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
         mChatAdapter = new ChatAdapter();
         mRecyclerView.setAdapter(mChatAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mRecyclerView.addOnLayoutChangeListener(this);
     }
 
     @Override
@@ -110,6 +112,9 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
         Logger.exitLog();
     }
 
+    /**
+     * Read message from text input and process it for sending to recipient. After processing, text input is cleared.
+     */
     private void readMessage() {
         Logger.entryLog();
         String message = mEtMessage.getText().toString();
@@ -125,6 +130,15 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
         Logger.exitLog();
     }
 
+    /**
+     * Listen to 'Enter' button press while typing message. When clicked, same action as 'Send' button press is performed.
+     * Message will be read from text input and processed.
+     *
+     * @param view     : View object of text input
+     * @param actionId : Action Id of key press
+     * @param keyEvent : Key event of input
+     * @return true if any action is performed during this callback
+     */
     @Override
     public boolean onKey(View view, int actionId, KeyEvent keyEvent) {
         boolean status = false;
@@ -145,5 +159,20 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
     protected void onPause() {
         super.onPause();
         mChatPresenter.onAppStop();
+    }
+
+    /**
+     * When text input gets focus, message list will be scrolled to bottom, to show above the keyboard.
+     */
+    @Override
+    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+        if (bottom < oldBottom) {
+            mRecyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mRecyclerView.scrollToPosition(mChatAdapter.getItemCount() - 1);
+                }
+            }, 10);
+        }
     }
 }

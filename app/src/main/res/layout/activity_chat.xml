@@ -51,19 +51,19 @@
             android:background="?attr/selectableItemBackground"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
-            android:text="Benny"
+            android:text="User"
             android:textColor="?attr/colorTextPrimary"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <ImageView
-            android:clickable="true"
-            android:layout_marginEnd="5dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
             android:src="@drawable/ic_option" />
 
     </RelativeLayout>
@@ -77,10 +77,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="55dp"
         android:layout_gravity="bottom"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp">
 
         <EditText
             android:id="@+id/et_message"
@@ -95,14 +98,13 @@
 
         <ImageView
             android:id="@+id/iv_send"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_gravity="center"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:background="?selectableItemBackgroundBorderless"
             android:padding="0dp"
-            android:src="@mipmap/ic_send"
-            android:text="SEND" />
+            android:src="@mipmap/ic_send"/>
 
     </LinearLayout>
 
