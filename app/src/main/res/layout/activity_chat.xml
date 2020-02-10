@@ -87,12 +87,12 @@
 
         <EditText
             android:id="@+id/et_message"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:background="@drawable/layout_rounded_grey_text_box"
-            android:hint="Type here..."
+            android:hint="@string/MESSAGE_INPUT_HINT"
             android:paddingLeft="20dp"
             android:paddingRight="20dp" />
 
