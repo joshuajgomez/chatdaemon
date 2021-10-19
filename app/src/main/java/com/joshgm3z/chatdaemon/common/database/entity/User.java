@@ -3,6 +3,7 @@ package com.joshgm3z.chatdaemon.common.database.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.joshgm3z.chatdaemon.common.Const;
@@ -21,6 +22,7 @@ public class User {
     @ColumnInfo(name = Const.DbFields.User.PHONE_NUMBER)
     private String mPhoneNumber;
 
+    @Ignore
     public User() {
     }
 

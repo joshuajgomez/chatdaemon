@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import com.joshgm3z.chatdaemon.common.database.dao.UserDao;
 import com.joshgm3z.chatdaemon.common.database.entity.User;
 
-@Database(entities = {User.class}, version = 1)
+@Database(entities = {User.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static String DB_NAME = "chat-app-database";
