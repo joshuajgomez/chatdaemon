@@ -10,15 +10,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/GreenTheme">
+
         <service
             android:name=".service.ChatService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".presentation.register.RegisterActivity">
-        </activity>
+        <activity android:name=".presentation.register.RegisterActivity" />
         <activity android:name=".presentation.chat.ChatActivity" />
-        <activity android:name=".presentation.home.HomeActivity"
+        <activity
+            android:name=".presentation.home.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

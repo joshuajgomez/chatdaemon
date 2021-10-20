@@ -10,8 +10,6 @@ public interface IRegisterView {
 
     void showLoadingScreen(String userName);
 
-    void checkPermission();
-
     void showLoadingMask(String loadingMessage);
 
     void hideLoadingMask();

@@ -126,4 +126,15 @@ public class PojoBuilder {
         Logger.exitLog();
         return getDateSortedChatList(chatList);
     }
+
+    public static List<User> getUserList(List<DocumentSnapshot> documents) {
+        List<User> userList = new ArrayList<>();
+        for (DocumentSnapshot document : documents) {
+            String name = (String) document.get(Const.DbFields.User.NAME);
+            String phoneNumber = (String) document.get(Const.DbFields.User.PHONE_NUMBER);
+            String id = document.getId();
+            userList.add(new User(id, name, phoneNumber));
+        }
+        return userList;
+    }
 }

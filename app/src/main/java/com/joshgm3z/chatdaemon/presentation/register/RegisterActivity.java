@@ -28,9 +28,7 @@ import com.joshgm3z.chatdaemon.presentation.register.phoneNumber.RegisterPhoneFr
 import com.joshgm3z.chatdaemon.presentation.register.welcome.IProgressUpdateListener;
 import com.joshgm3z.chatdaemon.presentation.register.welcome.RegisterCompleteFragment;
 
-public class RegisterActivity extends AppCompatActivity implements IRegisterView, IRegisterFragmentListener, ContactFetcher.ContactFetcherCallback {
-
-    private static final int PERMISSION_REQUEST_READ_CONTACTS = 100;
+public class RegisterActivity extends AppCompatActivity implements IRegisterView, IRegisterFragmentListener {
 
     private static final String TAG_LOADING_FRAGMENT = "TAG_LOADING_FRAGMENT";
 
@@ -154,79 +152,4 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterView
         mProgressUpdateListener = progressUpdateListener;
     }
 
-    @Override
-    public void checkPermission() {
-        if (isPermissionGranted()) {
-            // Permission granted
-            fetchContacts();
-        } else {
-            // Permission not granted
-            askPermission();
-        }
-    }
-
-    private void askPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},
-                PERMISSION_REQUEST_READ_CONTACTS);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_REQUEST_READ_CONTACTS: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission granted
-                    fetchContacts();
-                } else {
-                    // Permission denied. Show error
-                    showPermissionError();
-                }
-                return;
-            }
-        }
-    }
-
-    private void fetchContacts() {
-        ContactFetcher contactFetcher = new ContactFetcher(this);
-        contactFetcher.fetch();
-    }
-
-    private void showPermissionError() {
-        new AlertDialog.Builder(this)
-                .setTitle("Permission denied")
-                .setMessage("Please grant permission to read contacts")
-                .setPositiveButton("Ask again", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        askPermission();
-                    }
-                })
-                .setNegativeButton("Close app", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ActivityCompat.finishAffinity(RegisterActivity.this);
-                    }
-                })
-                .show();
-    }
-
-
-    private boolean isPermissionGranted() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
-                == PackageManager.PERMISSION_GRANTED;
-    }
-
-    @Override
-    public void onComplete() {
-        Logger.log(Log.INFO, "contact fetch complete");
-        mRegisterPresenter.contactFetchComplete();
-    }
-
-    @Override
-    public void progressUpdate(int progress) {
-        Logger.log(Log.INFO, "progress = [" + progress + "]");
-        if (mProgressUpdateListener != null) {
-            mProgressUpdateListener.onProgressUpdate(progress);
-        }
-    }
 }

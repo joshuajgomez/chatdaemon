@@ -66,10 +66,11 @@ public class RegisterPresenter implements IRegisterPresenter {
     }
 
     private void proceedUser(User user) {
-        mUser = user;
         Logger.entryLog();
-        mRegisterView.showLoadingScreen(user.getName());
-        mRegisterView.checkPermission();
+        mUser = user;
+        //mRegisterView.showLoadingScreen(user.getName());
+        //mRegisterView.checkPermission();
+        mRegisterView.gotoHomeScreen(mUser);
         Logger.exitLog();
     }
 

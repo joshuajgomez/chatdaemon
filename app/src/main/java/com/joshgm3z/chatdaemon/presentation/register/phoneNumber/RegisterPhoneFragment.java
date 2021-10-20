@@ -81,13 +81,10 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
     @Override
     public void onClick(View view) {
         Logger.entryLog();
-        String phoneNumber = mEtPhoneNumber.getText().toString();
-        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
-            phoneNumber = phoneNumber.trim();
-            phoneNumber = ContactFetcher.formatPhoneNumber(phoneNumber);
-            if (phoneNumber != null) {
-                mRegisterPhoneListener.onPhoneNumberEntered(phoneNumber);
-            }
+        String phoneNumber = mEtPhoneNumber.getText().toString().trim();
+        Logger.log("phoneNumber " + phoneNumber);
+        if (!phoneNumber.isEmpty()) {
+            mRegisterPhoneListener.onPhoneNumberEntered(phoneNumber);
         } else {
             Toast.makeText(getContext(), "Please enter your phone number", Toast.LENGTH_SHORT).show();
         }

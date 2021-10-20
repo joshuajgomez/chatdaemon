@@ -28,9 +28,9 @@ import com.joshgm3z.chatdaemon.presentation.chat.ChatActivity;
 import com.joshgm3z.chatdaemon.presentation.home.adapter.HomeChatAdapter;
 import com.joshgm3z.chatdaemon.presentation.home.adapter.IHomeAdapterCallback;
 import com.joshgm3z.chatdaemon.presentation.home.search.ISearchFragmentCallback;
-import com.joshgm3z.chatdaemon.presentation.home.search.UserSearchFragment;
 import com.joshgm3z.chatdaemon.presentation.register.RegisterActivity;
 import com.joshgm3z.chatdaemon.common.utils.ContactFetcher;
+import com.joshgm3z.chatdaemon.presentation.users.UsersFragment;
 import com.joshgm3z.chatdaemon.service.ChatService;
 
 import java.util.List;
@@ -38,7 +38,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeAdapterCallback, View.OnClickListener, ISearchFragmentCallback, ContactFetcher.ContactFetcherCallback {
+public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeAdapterCallback, View.OnClickListener, ISearchFragmentCallback, ContactFetcher.ContactFetcherCallback, UsersFragment.UsersFragmentCallback {
 
     private static final int PERMISSION_REQUEST_READ_CONTACTS = 100;
 
@@ -56,6 +56,9 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
     private IHomePresenter mHomePresenter;
 
     private static final String USER_ID = "user_id";
+    private String TAG_USERS_FRAGMENT = "USERS_FRAGMENT";
+
+    private UsersFragment mUsersFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,58 +66,15 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
         Logger.entryLog();
         setContentView(R.layout.activity_home);
 
-        if (!SharedPrefs.getInstance(this).isUserRegistered()) {
-            // New user. goto register screen.
-            ActivityCompat.finishAffinity(this);
-            RegisterActivity.startActivity(this);
-        } else if (isPermissionGranted()) {
+        if (SharedPrefs.getInstance(this).isUserRegistered()) {
             // Sufficient permission granted.
             initHomeScreen();
         } else {
-            // No permission.
-            askPermission();
+            // New user. goto register screen.
+            ActivityCompat.finishAffinity(this);
+            RegisterActivity.startActivity(this);
         }
         Logger.exitLog();
-    }
-
-    private void askPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},
-                PERMISSION_REQUEST_READ_CONTACTS);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_REQUEST_READ_CONTACTS: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission granted
-                    initHomeScreen();
-                } else {
-                    // Permission denied. Show error
-                    showPermissionError();
-                }
-                return;
-            }
-        }
-    }
-
-    private void showPermissionError() {
-        new AlertDialog.Builder(this)
-                .setTitle("Permission denied")
-                .setMessage("Please grant permission to read contacts")
-                .setPositiveButton("Ask again", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        askPermission();
-                    }
-                })
-                .setNegativeButton("Close app", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ActivityCompat.finishAffinity(HomeActivity.this);
-                    }
-                })
-                .show();
     }
 
     private void initHomeScreen() {
@@ -136,11 +96,6 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
         initUI();
     }
 
-    private boolean isPermissionGranted() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
-                == PackageManager.PERMISSION_GRANTED;
-    }
-
     private void initUI() {
         ButterKnife.bind(this);
         mIvSearch.setOnClickListener(this);
@@ -151,8 +106,6 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
 
         mHomePresenter.onAppStart();
 
-        ContactFetcher contactFetcher = new ContactFetcher(this);
-        contactFetcher.fetch();
     }
 
     @Override
@@ -176,10 +129,11 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
 
     @Override
     public void onClick(View view) {
-        Fragment userSearchFragment = UserSearchFragment.newInstance();
+        mUsersFragment = UsersFragment.newInstance();
+        mUsersFragment.registerCallback(this);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction
-                .add(R.id.fl_home, userSearchFragment)
+                .add(R.id.fl_home, mUsersFragment, TAG_USERS_FRAGMENT)
                 .addToBackStack(null)
                 .commit();
     }
@@ -200,5 +154,13 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
     @Override
     public void progressUpdate(int progress) {
         Logger.log(Log.INFO, "progress = [" + progress + "]");
+    }
+
+    @Override
+    public void removeUsersFragment() {
+        Logger.entryLog();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.remove(mUsersFragment).commit();
+        Logger.exitLog();
     }
 }

@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -52,19 +53,27 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Logger.entryLog();
         setContentView(R.layout.activity_chat);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         String userId = intent.getStringExtra(USER_ID);
 
         mChatPresenter = new ChatPresenter(this, userId);
-        String userName = AppDatabase.getInstance(this).mUserDao().getUser(userId).getName();
+        String userName;
+        try {
+            userName = AppDatabase.getInstance(this).mUserDao().getUser(userId).getName();
+            initUI(userName);
+        } catch (NullPointerException e) {
+            Logger.log(Log.ERROR, "e.getMessage()=[" + e.getMessage() + "]");
+            Toast.makeText(this, "Unable to get user details", Toast.LENGTH_LONG).show();
+        }
 
-        initUI(userName);
+        Logger.exitLog();
     }
 
     private void initUI(String userName) {
-        ButterKnife.bind(this);
         mIvSend.setOnClickListener(this);
         mEtMessage.setOnKeyListener(this);
         mTvUser.setText(userName);
@@ -86,9 +95,11 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
 
 
     public static void startActivity(Context context, String userId) {
+        Logger.entryLog();
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(USER_ID, userId);
         context.startActivity(intent);
+        Logger.exitLog();
     }
 
     @Override
