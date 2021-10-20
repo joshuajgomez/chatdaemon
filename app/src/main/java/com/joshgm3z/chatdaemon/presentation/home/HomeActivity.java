@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.joshgm3z.chatdaemon.R;
 import com.joshgm3z.chatdaemon.common.data.ChatInfo;
+import com.joshgm3z.chatdaemon.common.database.entity.User;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 import com.joshgm3z.chatdaemon.common.utils.SharedPrefs;
 import com.joshgm3z.chatdaemon.presentation.chat.ChatActivity;
@@ -31,6 +32,7 @@ import com.joshgm3z.chatdaemon.presentation.home.search.ISearchFragmentCallback;
 import com.joshgm3z.chatdaemon.presentation.register.RegisterActivity;
 import com.joshgm3z.chatdaemon.common.utils.ContactFetcher;
 import com.joshgm3z.chatdaemon.presentation.users.UsersFragment;
+import com.joshgm3z.chatdaemon.service.ChatEngine;
 import com.joshgm3z.chatdaemon.service.ChatService;
 
 import java.util.List;
@@ -38,9 +40,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeAdapterCallback, View.OnClickListener, ISearchFragmentCallback, ContactFetcher.ContactFetcherCallback, UsersFragment.UsersFragmentCallback {
-
-    private static final int PERMISSION_REQUEST_READ_CONTACTS = 100;
+public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeAdapterCallback,
+        View.OnClickListener, ISearchFragmentCallback, UsersFragment.UsersFragmentCallback {
 
     @BindView(R.id.rv_home_chat_list)
     RecyclerView mRecyclerView;
@@ -65,6 +66,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
         super.onCreate(savedInstanceState);
         Logger.entryLog();
         setContentView(R.layout.activity_home);
+        ButterKnife.bind(this);
 
         if (SharedPrefs.getInstance(this).isUserRegistered()) {
             // Sufficient permission granted.
@@ -81,12 +83,21 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
         Logger.log(Log.INFO, "Init home screen");
         String userId;
 
+        new ChatEngine(this).start();
+
         if (getIntent().hasExtra(USER_ID)) {
             Logger.log(Log.INFO, "User found in intent");
             userId = getIntent().getStringExtra(USER_ID);
         } else {
             Logger.log(Log.INFO, "User found in shared prefs");
             userId = SharedPrefs.getInstance(this).getUser().getId();
+        }
+        User user = SharedPrefs.getInstance(this).getUser();
+        if (user != null) {
+            String name = user.getName();
+            mTvAppTitle.setText(name.toString());
+        } else {
+            Logger.log(Log.ERROR, "name is null");
         }
         Logger.log(Log.INFO, "userId = [" + userId + "]");
         mHomePresenter = new HomePresenter(this, userId);
@@ -141,19 +152,6 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
     @Override
     public void onUserClick(String userId) {
         ChatActivity.startActivity(this, userId);
-    }
-
-    @Override
-    public void onComplete() {
-        Logger.log(Log.INFO, "Contact fetch complete");
-        if (mHomePresenter != null) {
-            mHomePresenter.onAppStart();
-        }
-    }
-
-    @Override
-    public void progressUpdate(int progress) {
-        Logger.log(Log.INFO, "progress = [" + progress + "]");
     }
 
     @Override

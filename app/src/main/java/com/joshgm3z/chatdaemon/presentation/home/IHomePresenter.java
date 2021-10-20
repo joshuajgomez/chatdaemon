@@ -12,4 +12,5 @@ public interface IHomePresenter {
 
     void noChatFound();
 
+    void onUsersFetched();
 }

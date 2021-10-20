@@ -8,4 +8,7 @@ public interface IHomeModel {
 
     void listenForMessages();
 
+    void fetchNewUsers();
+
+    boolean isUsersAdded();
 }

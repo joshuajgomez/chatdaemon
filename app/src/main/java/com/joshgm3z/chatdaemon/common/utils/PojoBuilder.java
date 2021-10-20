@@ -41,9 +41,10 @@ public class PojoBuilder {
                 User fromUser = null;
                 User toUser = null;
 
-                if (fromUserId.equals(SharedPrefs.getInstance(context).getUser().getId())) {
+                User currentUser = SharedPrefs.getInstance(context).getUser();
+                if (fromUserId.equals(currentUser.getId())) {
                     toUser = appDatabase.mUserDao().getUser(toUserId);
-                } else if (toUserId.equals(SharedPrefs.getInstance(context).getUser().getId())) {
+                } else if (toUserId.equals(currentUser.getId())) {
                     fromUser = appDatabase.mUserDao().getUser(fromUserId);
                 } else {
                     Logger.log(Log.WARN, "Invalid chat: " + document.getData());
@@ -137,4 +138,11 @@ public class PojoBuilder {
         }
         return userList;
     }
+
+    private static void getUsersFromChatList(List<DocumentSnapshot> documents) {
+        for (DocumentSnapshot document : documents) {
+
+        }
+    }
+
 }

@@ -18,10 +18,13 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.joshgm3z.chatdaemon.common.Const;
 import com.joshgm3z.chatdaemon.common.data.Chat;
+import com.joshgm3z.chatdaemon.common.database.AppDatabase;
+import com.joshgm3z.chatdaemon.common.database.dao.UserDao;
 import com.joshgm3z.chatdaemon.common.database.entity.User;
 import com.joshgm3z.chatdaemon.common.utils.DummyData;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 import com.joshgm3z.chatdaemon.common.utils.PojoBuilder;
+import com.joshgm3z.chatdaemon.common.utils.SharedPrefs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,11 +49,37 @@ public class HomeModel implements IHomeModel, EventListener<QuerySnapshot> {
 
     @Override
     public void listenForMessages() {
-        Logger.log(Log.INFO, "listening for messages");
+        Logger.log(Log.INFO, "listening for messages " + mUserId);
         CollectionReference collection = mFirebaseFirestore.collection(Const.DbCollections.CHATS);
         collection.whereEqualTo(Const.DbFields.Chat.FROM_USER, mUserId);
         collection.whereEqualTo(Const.DbFields.Chat.TO_USER, mUserId);
         collection.addSnapshotListener(this);
+    }
+
+    @Override
+    public void fetchNewUsers() {
+        mFirebaseFirestore.collection(Const.DbCollections.USERS).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Logger.log(Log.ERROR, error.getMessage());
+                    return;
+                }
+                UserDao userDao = AppDatabase.getInstance(mContext).mUserDao();
+                List<User> userList = PojoBuilder.getUserList(value.getDocuments());
+                for (User user : userList) {
+                    if (userDao.getUser(user.getId()) == null) {
+                        userDao.addUser(user);
+                    }
+                }
+                mHomePresenter.onUsersFetched();
+            }
+        });
+    }
+
+    @Override
+    public boolean isUsersAdded() {
+        return !AppDatabase.getInstance(mContext).mUserDao().getAllUsers().isEmpty();
     }
 
     @Override
@@ -59,9 +88,13 @@ public class HomeModel implements IHomeModel, EventListener<QuerySnapshot> {
             Logger.log(Log.WARN, "Listen failed");
             return;
         }
+        User user = SharedPrefs.getInstance(mContext).getUser();
+        Logger.log("user=[" + user + "]");
         List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+        Logger.log("documents.size()=[" + documents.size() + "]");
         List<Chat> chatList = PojoBuilder.getChatList(mContext, documents);
         Logger.log(Log.INFO, "chatList update = [" + chatList + "]");
         mHomePresenter.chatListReceived(chatList);
     }
+
 }

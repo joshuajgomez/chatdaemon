@@ -60,18 +60,11 @@ public class UserPresenter implements IUserContract.Presenter {
 
     private void addNew(User user) throws SQLiteConstraintException {
         Logger.entryLog();
-        List<User> allUsers = AppDatabase.getInstance(mContext).mUserDao().getAllUsers();
-        if (allUsers.isEmpty()) {
+        User savedUser = AppDatabase.getInstance(mContext).mUserDao().getUser(user.getId());
+        if (savedUser == null) {
             AppDatabase.getInstance(mContext).mUserDao().addUser(user);
-        }
-        for (User savedUser : allUsers) {
-            Logger.log("user=[" + user + "], savedUser=[" + savedUser + "]");
-            if (!savedUser.getId().equals(user.getId())) {
-                Logger.log("adding user");
-                AppDatabase.getInstance(mContext).mUserDao().addUser(user);
-            } else {
-                // Do not add existing users
-            }
+        } else {
+            // Ignore if user is already added
         }
         Logger.exitLog();
     }

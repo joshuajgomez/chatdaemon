@@ -20,12 +20,17 @@ public class HomePresenter implements IHomePresenter {
         mHomeView = activity;
         mHomeModel = new HomeModel(activity.getApplicationContext(), this, userId);
         mChatInfoBuilder = new ChatInfoBuilder();
+        mHomeModel.fetchNewUsers();
     }
 
     @Override
     public void onAppStart() {
         Logger.log(Log.INFO, "home app started");
-        mHomeModel.listenForMessages();
+        if (mHomeModel.isUsersAdded()) {
+            mHomeModel.listenForMessages();
+        } else {
+            mHomeModel.fetchNewUsers();
+        }
     }
 
     @Override
@@ -40,5 +45,10 @@ public class HomePresenter implements IHomePresenter {
     public void noChatFound() {
         Logger.entryLog();
         Logger.exitLog();
+    }
+
+    @Override
+    public void onUsersFetched() {
+        mHomeModel.listenForMessages();
     }
 }
