@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.joshgm3z.chatdaemon.common.database.entity.User;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
-import com.joshgm3z.chatdaemon.common.utils.SharedPrefs;
 
 public class RegisterPresenter implements IRegisterPresenter {
 
@@ -17,7 +16,7 @@ public class RegisterPresenter implements IRegisterPresenter {
 
     private User mUser;
 
-    public RegisterPresenter(RegisterActivity activity) {
+    public RegisterPresenter(LoginActivity activity) {
         Logger.entryLog();
         mRegisterView = (IRegisterView) activity;
         mContext = activity.getApplicationContext();
@@ -26,14 +25,14 @@ public class RegisterPresenter implements IRegisterPresenter {
     }
 
     @Override
-    public void onAddUserClick(String name) {
+    public void onAddUserClick(String name, String password) {
         Logger.entryLog();
         mRegisterModel.addUser(name);
         Logger.exitLog();
     }
 
     @Override
-    public void onPhoneNumberEntered(String phoneNumber) {
+    public void onLoginClicked(String phoneNumber, String password) {
         Logger.entryLog();
         mRegisterModel.checkUser(phoneNumber);
         mRegisterView.showLoadingMask("Checking phone number");

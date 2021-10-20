@@ -3,8 +3,8 @@
     <string name="app_name">ChatDaemon</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="string_app_title">#talky</string>
-    <string name="welcome_message">Welcome to #talky</string>
+    <string name="app_title">talky</string>
+    <string name="welcome_message">welcome to</string>
     <string name="enter_phone_number">Please enter your phone number</string>
     <string name="phone_number_prefix">+91</string>
     <string name="enter_phone_name">Please enter your name</string>
@@ -12,4 +12,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="MESSAGE_INPUT_HINT">Type here...</string>
+    <string name="new_user"><u>new user</u></string>
+    <string name="type_username">username</string>
+    <string name="type_password">password</string>
 </resources>

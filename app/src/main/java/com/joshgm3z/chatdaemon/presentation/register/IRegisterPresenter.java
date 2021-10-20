@@ -4,9 +4,9 @@ import com.joshgm3z.chatdaemon.common.database.entity.User;
 
 public interface IRegisterPresenter {
 
-    void onAddUserClick(String name);
+    void onAddUserClick(String name, String password);
 
-    void onPhoneNumberEntered(String phoneNumber);
+    void onLoginClicked(String phoneNumber, String password);
 
     void userFound(User user);
 

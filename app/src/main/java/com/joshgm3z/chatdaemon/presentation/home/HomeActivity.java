@@ -1,21 +1,15 @@
 package com.joshgm3z.chatdaemon.presentation.home;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,8 +23,7 @@ import com.joshgm3z.chatdaemon.presentation.chat.ChatActivity;
 import com.joshgm3z.chatdaemon.presentation.home.adapter.HomeChatAdapter;
 import com.joshgm3z.chatdaemon.presentation.home.adapter.IHomeAdapterCallback;
 import com.joshgm3z.chatdaemon.presentation.home.search.ISearchFragmentCallback;
-import com.joshgm3z.chatdaemon.presentation.register.RegisterActivity;
-import com.joshgm3z.chatdaemon.common.utils.ContactFetcher;
+import com.joshgm3z.chatdaemon.presentation.register.LoginActivity;
 import com.joshgm3z.chatdaemon.presentation.users.UsersFragment;
 import com.joshgm3z.chatdaemon.service.ChatEngine;
 import com.joshgm3z.chatdaemon.service.ChatService;
@@ -74,7 +67,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
         } else {
             // New user. goto register screen.
             ActivityCompat.finishAffinity(this);
-            RegisterActivity.startActivity(this);
+            LoginActivity.startActivity(this);
         }
         Logger.exitLog();
     }

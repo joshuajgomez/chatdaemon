@@ -7,36 +7,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 
 import androidx.fragment.app.Fragment;
 
 import com.joshgm3z.chatdaemon.R;
-import com.joshgm3z.chatdaemon.common.utils.ContactFetcher;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class RegisterPhoneFragment extends Fragment implements View.OnClickListener {
+public class LoginFragment extends Fragment implements View.OnClickListener {
 
-    @BindView(R.id.et_phone_number)
-    EditText mEtPhoneNumber;
+    @BindView(R.id.et_user_name)
+    EditText mEtUsername;
 
-    @BindView(R.id.ll_continue_button)
-    LinearLayout mBtContinue;
+    @BindView(R.id.et_password)
+    EditText mEtPassword;
 
     private IRegisterFragmentListener mRegisterPhoneListener;
 
-    public RegisterPhoneFragment() {
+    public LoginFragment() {
         // Required empty public constructor
     }
 
-    public static RegisterPhoneFragment newInstance() {
+    public static LoginFragment newInstance() {
         Logger.entryLog();
-        RegisterPhoneFragment fragment = new RegisterPhoneFragment();
+        LoginFragment fragment = new LoginFragment();
         Logger.exitLog();
         return fragment;
     }
@@ -52,9 +50,8 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Logger.entryLog();
-        View view = inflater.inflate(R.layout.fragment_register_phone, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
-        mBtContinue.setOnClickListener(this);
         Logger.exitLog();
         return view;
     }
@@ -78,16 +75,26 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
         Logger.exitLog();
     }
 
-    @Override
+    @OnClick({R.id.btn_login, R.id.btn_new_user})
     public void onClick(View view) {
         Logger.entryLog();
-        String phoneNumber = mEtPhoneNumber.getText().toString().trim();
-        Logger.log("phoneNumber " + phoneNumber);
-        if (!phoneNumber.isEmpty()) {
-            mRegisterPhoneListener.onPhoneNumberEntered(phoneNumber);
-        } else {
-            Toast.makeText(getContext(), "Please enter your phone number", Toast.LENGTH_SHORT).show();
+        if (view.getId() == R.id.btn_login) {
+
+            String username = mEtUsername.getText().toString().trim();
+            String password = mEtPassword.getText().toString().trim();
+            Logger.log("username " + username);
+            if (username.isEmpty()) {
+                mEtUsername.setError("Please enter an username");
+            } else if (password.isEmpty()) {
+                mEtPassword.setError("Please enter password");
+            }
+            if (!username.isEmpty() && !password.isEmpty()) {
+                mRegisterPhoneListener.onUsernameEntered(username, password);
+            }
+        } else if (view.getId() == R.id.btn_new_user) {
+
         }
         Logger.exitLog();
     }
+
 }

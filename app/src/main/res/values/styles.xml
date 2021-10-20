@@ -9,14 +9,14 @@
     </style>
 
     <style name="GreenTheme" parent="AppTheme">
-        <item name="colorBackgroundPrimary">@color/green</item>
+        <item name="colorBackgroundPrimary">@color/white</item>
         <item name="colorBackgroundSecondary">@color/white</item>
         <item name="colorAccent">@color/black</item>
-        <item name="colorTextPrimary">@color/white</item>
-        <item name="colorTextSecondary">@color/black</item>
+        <item name="colorTextPrimary">@color/black</item>
+        <item name="colorTextSecondary">@color/green</item>
         <item name="colorProgressBar">@color/white</item>
         <item name="colorButtonBackground">@color/black</item>
-        <item name="colorButtonText">@color/green</item>
+        <item name="colorButtonText">@color/white</item>
 
         <item name="imageDefaultUser">@mipmap/ic_user_blue</item>
 

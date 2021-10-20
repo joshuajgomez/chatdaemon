@@ -1,34 +1,30 @@
 package com.joshgm3z.chatdaemon.presentation.register;
 
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.joshgm3z.chatdaemon.R;
 import com.joshgm3z.chatdaemon.common.database.entity.User;
-import com.joshgm3z.chatdaemon.common.utils.ContactFetcher;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 import com.joshgm3z.chatdaemon.presentation.home.HomeActivity;
 import com.joshgm3z.chatdaemon.presentation.register.loading.LoadingFragment;
-import com.joshgm3z.chatdaemon.presentation.register.name.RegisterNameFragment;
+import com.joshgm3z.chatdaemon.presentation.register.name.SignupFragment;
 import com.joshgm3z.chatdaemon.presentation.register.phoneNumber.IRegisterFragmentListener;
-import com.joshgm3z.chatdaemon.presentation.register.phoneNumber.RegisterPhoneFragment;
+import com.joshgm3z.chatdaemon.presentation.register.phoneNumber.LoginFragment;
 import com.joshgm3z.chatdaemon.presentation.register.welcome.IProgressUpdateListener;
 import com.joshgm3z.chatdaemon.presentation.register.welcome.RegisterCompleteFragment;
 
-public class RegisterActivity extends AppCompatActivity implements IRegisterView, IRegisterFragmentListener {
+public class LoginActivity extends AppCompatActivity implements IRegisterView, IRegisterFragmentListener {
 
     private static final String TAG_LOADING_FRAGMENT = "TAG_LOADING_FRAGMENT";
 
@@ -48,30 +44,43 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterView
 
     private void initUI() {
         //ButterKnife.bind(this);
-        showRegisterPhoneScreen();
+        showLoginScreen();
     }
 
-    private void showRegisterPhoneScreen() {
+    private void showLoginScreen() {
         Logger.entryLog();
-        Fragment registerPhoneFragment = RegisterPhoneFragment.newInstance();
+        Fragment loginFragment = LoginFragment.newInstance();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_register_phone, registerPhoneFragment).commit();
+        fragmentTransaction.add(R.id.fragment_login, loginFragment).commit();
         Logger.exitLog();
     }
 
     public static void startActivity(Context context) {
         Logger.entryLog();
-        Intent intent = new Intent(context, RegisterActivity.class);
+        Intent intent = new Intent(context, LoginActivity.class);
         context.startActivity(intent);
         Logger.exitLog();
     }
 
     @Override
-    public void onPhoneNumberEntered(String phoneNumber) {
+    public void onUsernameEntered(String username, String password) {
         Logger.entryLog();
-        Logger.log(Log.INFO, "phoneNumber = [" + phoneNumber + "]");
-        mRegisterPresenter.onPhoneNumberEntered(phoneNumber);
+        mRegisterPresenter.onLoginClicked(username, password);
         Logger.exitLog();
+    }
+
+    @Override
+    public void onNewUserClick() {
+        Logger.entryLog();
+        Fragment registerNameFragment = SignupFragment.newInstance();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fragment_login, registerNameFragment).commit();
+        Logger.exitLog();
+    }
+
+    @Override
+    public void onSignupClicked(String username, String password) {
+        mRegisterPresenter.onAddUserClick(username, password);
     }
 
     @Override
@@ -79,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterView
         Logger.entryLog();
         Fragment loadingFragment = LoadingFragment.newInstance(loadingMessage);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_register_phone, loadingFragment, TAG_LOADING_FRAGMENT).commit();
+        fragmentTransaction.add(R.id.fragment_login, loadingFragment, TAG_LOADING_FRAGMENT).commit();
         Logger.exitLog();
     }
 
@@ -112,14 +121,6 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterView
     }
 
     @Override
-    public void onNameEntered(String name) {
-        Logger.entryLog();
-        Logger.log(Log.INFO, "name = [" + name + "]");
-        mRegisterPresenter.onAddUserClick(name);
-        Logger.exitLog();
-    }
-
-    @Override
     public void gotoHomeScreen(User user) {
         Logger.entryLog();
         Logger.log(Log.INFO, "user = [" + user + "]");
@@ -131,9 +132,9 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterView
     @Override
     public void showRegisterNameScreen(String phoneNumber) {
         Logger.entryLog();
-        Fragment registerNameFragment = RegisterNameFragment.newInstance();
+        Fragment registerNameFragment = SignupFragment.newInstance();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_register_phone, registerNameFragment).commit();
+        fragmentTransaction.add(R.id.fragment_login, registerNameFragment).commit();
         Logger.exitLog();
     }
 
@@ -144,7 +145,7 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterView
         Fragment registerCompleteFragment = RegisterCompleteFragment.newInstance(userName);
         setProgressUpdateListener((IProgressUpdateListener) registerCompleteFragment);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_register_phone, registerCompleteFragment).commit();
+        fragmentTransaction.add(R.id.fragment_login, registerCompleteFragment).commit();
         Logger.exitLog();
     }
 

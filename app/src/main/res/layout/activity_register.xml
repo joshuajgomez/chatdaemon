@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="?attr/colorBackgroundPrimary"
-    tools:context=".presentation.register.RegisterActivity">
+    tools:context=".presentation.register.LoginActivity">
 
     <FrameLayout
-        android:id="@+id/fragment_register_phone"
+        android:id="@+id/fragment_login"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
