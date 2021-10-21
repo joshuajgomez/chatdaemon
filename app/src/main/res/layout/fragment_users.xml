@@ -2,14 +2,81 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:clickable="true"
-    android:background="@color/white"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
     tools:context=".presentation.users.UsersFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_all_users"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!--Action tab-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarHeight"
+            android:layout_gravity="top"
+            android:background="@drawable/layout_with_shadow">
+
+            <!--   Back button and user pic container     -->
+            <LinearLayout
+                android:id="@+id/ll_back_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="3dp"
+                    android:src="@drawable/ic_back_arrow_green" />
+
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_search_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="50dp"
+                android:layout_toLeftOf="@+id/iv_clear"
+                android:layout_toEndOf="@id/ll_back_container"
+                android:background="@drawable/layout_rounded_grey_text_box"
+                android:hint="Search users"
+                android:lines="1"
+                android:paddingStart="20dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="8dp"
+                android:textColor="?attr/colorTextPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/iv_clear"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="5dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:padding="3dp"
+                android:src="@drawable/ic_cross" />
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_all_users"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
 </FrameLayout>

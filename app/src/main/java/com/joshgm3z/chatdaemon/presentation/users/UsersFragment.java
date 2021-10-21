@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.joshgm3z.chatdaemon.R;
@@ -21,12 +23,16 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class UsersFragment extends Fragment implements UsersAdapter.UsersCallback,
         IUserContract.View {
 
     @BindView(R.id.rv_all_users)
     RecyclerView mRvUsers;
+
+    @BindView(R.id.et_search_input)
+    EditText mEtSearchInput;
 
     private UsersAdapter mUsersAdapter;
 
@@ -78,6 +84,16 @@ public class UsersFragment extends Fragment implements UsersAdapter.UsersCallbac
         }
         ChatActivity.startActivity(getActivity(), user.getId());
         Logger.exitLog();
+    }
+
+    @OnClick({R.id.ll_back_container, R.id.iv_clear})
+    public void onClick(View view) {
+        if (view.getId() == R.id.ll_back_container) {
+            mEtSearchInput.clearFocus();
+            mCallback.removeUsersFragment();
+        } else if (view.getId() == R.id.iv_clear) {
+            mEtSearchInput.setText("");
+        }
     }
 
     @Override
