@@ -41,10 +41,11 @@ public class ChatInfoBuilder {
             chatInfo.setChatCounter(0);
             ChatInfo addedChatInfo = chatInfoBuffer.get(user.getId());
             int chatCounter = 0;
-            if (addedChatInfo != null
-                    && chatType == Const.ChatType.RECEIVED
-                    && chat.getStatus() == Chat.Status.DELIVERED) {
-                chatCounter = addedChatInfo.getChatCounter() + 1;
+            if (chatType == Const.ChatType.RECEIVED && chat.getStatus() == Chat.Status.DELIVERED) {
+                if (addedChatInfo != null)
+                    chatCounter = addedChatInfo.getChatCounter() + 1;
+                else
+                    chatCounter = 1;
             }
             chatInfo.setChatCounter(chatCounter);
 
