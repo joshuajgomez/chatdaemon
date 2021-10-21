@@ -67,7 +67,7 @@ public class Logger {
         if (toUser == null) {
             toUser = SharedPrefs.getInstance(context).getUser();
         }
-        String message = fromUser.getName() + " > " + toUser.getName() + " : " + chat.getMessage();
+        String message = fromUser.getUsername() + " > " + toUser.getUsername() + " : " + chat.getMessage();
         StackTraceElement element = Thread.currentThread().getStackTrace()[3];
         String className = element.getClassName();
         className = className.substring(className.lastIndexOf(".") + 1, className.length());

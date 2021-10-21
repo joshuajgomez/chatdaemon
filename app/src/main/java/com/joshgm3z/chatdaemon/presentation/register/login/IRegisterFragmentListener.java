@@ -1,9 +1,9 @@
-package com.joshgm3z.chatdaemon.presentation.register.phoneNumber;
+package com.joshgm3z.chatdaemon.presentation.register.login;
 
 
 public interface IRegisterFragmentListener {
 
-    void onUsernameEntered(String username, String password);
+    void onLoginClicked(String username, String password);
 
     void onNewUserClick();
 

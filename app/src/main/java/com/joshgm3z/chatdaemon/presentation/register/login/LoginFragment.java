@@ -1,4 +1,4 @@
-package com.joshgm3z.chatdaemon.presentation.register.phoneNumber;
+package com.joshgm3z.chatdaemon.presentation.register.login;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import androidx.fragment.app.Fragment;
@@ -89,12 +90,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 mEtPassword.setError("Please enter password");
             }
             if (!username.isEmpty() && !password.isEmpty()) {
-                mRegisterPhoneListener.onUsernameEntered(username, password);
+                mRegisterPhoneListener.onLoginClicked(username, password);
             }
         } else if (view.getId() == R.id.btn_new_user) {
-
+            mRegisterPhoneListener.onNewUserClick();
         }
         Logger.exitLog();
     }
 
+    public void showError(String message) {
+        mEtUsername.requestFocus();
+        mEtUsername.setError(message);
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
 }

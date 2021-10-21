@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorBackgroundPrimary"
     android:clickable="true"
-    tools:context=".presentation.register.phoneNumber.LoginFragment">
+    tools:context=".presentation.register.login.LoginFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -51,7 +51,7 @@ public class NotificationHandler {
 
     public void notifyNewMessage(Chat chat) {
         Logger.entryLog();
-        String title = chat.getFromUser().getName();
+        String title = chat.getFromUser().getUsername();
         String subtitle = chat.getMessage();
         sendNotification(chat.getFromUser().getId(), title, subtitle);
         Logger.exitLog();

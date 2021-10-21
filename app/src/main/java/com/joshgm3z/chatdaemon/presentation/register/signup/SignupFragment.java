@@ -1,4 +1,4 @@
-package com.joshgm3z.chatdaemon.presentation.register.name;
+package com.joshgm3z.chatdaemon.presentation.register.signup;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,13 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.joshgm3z.chatdaemon.R;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
-import com.joshgm3z.chatdaemon.presentation.register.phoneNumber.IRegisterFragmentListener;
+import com.joshgm3z.chatdaemon.presentation.register.login.IRegisterFragmentListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -86,11 +86,19 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
             mEtPassword1.setError("Please enter a password");
         } else if (password2.isEmpty()) {
             mEtPassword2.setError("Please enter password again");
+        } else if (!password1.equals(password2)){
+            mEtPassword2.setError("Passwords do not match");
         }
         if (!username.isEmpty() && !password1.isEmpty() && !password2.isEmpty()
                 && password1.equals(password2)) {
             mRegisterNameListener.onSignupClicked(username, password1);
         }
         Logger.exitLog();
+    }
+
+    public void showError(String message) {
+        mEtUsername.requestFocus();
+        mEtUsername.setError(message);
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

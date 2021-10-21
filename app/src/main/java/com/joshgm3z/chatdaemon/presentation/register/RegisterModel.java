@@ -23,36 +23,35 @@ import com.joshgm3z.chatdaemon.common.utils.SharedPrefs;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RegisterModel implements IRegisterModel {
+public class RegisterModel implements IRegisterContract.IRegisterModel {
 
-    private IRegisterPresenter mRegisterPresenter;
+    private IRegisterContract.IRegisterPresenter mRegisterPresenter;
 
     private Context mContext;
 
     private FirebaseFirestore mFirebaseFirestore;
 
-    private String newUserPhoneNumber;
+    private String mNewUsername;
 
-    public RegisterModel(Context context, IRegisterPresenter registerPresenter) {
+    public RegisterModel(Context context, IRegisterContract.IRegisterPresenter registerPresenter) {
         mContext = context;
         mRegisterPresenter = registerPresenter;
         mFirebaseFirestore = FirebaseFirestore.getInstance();
     }
 
     @Override
-    public void addUser(String name) {
+    public void addUser(String username, String password) {
         User user = new User();
-        user.setName(name);
-        user.setPhoneNumber(newUserPhoneNumber);
+        user.setUsername(username);
         Logger.log(Log.INFO, "user = [" + user + "]");
-        addUser(user);
+        addUser(user, password);
     }
 
-    private void addUser(final User user) {
+    private void addUser(final User user, String password) {
         Logger.entryLog();
         Map<String, Object> userMap = new HashMap<>();
-        userMap.put(Const.DbFields.User.NAME, user.getName());
-        userMap.put(Const.DbFields.User.PHONE_NUMBER, user.getPhoneNumber());
+        userMap.put(Const.DbFields.User.USERNAME, user.getUsername());
+        userMap.put(Const.DbFields.User.PASSWORD, password);
 
         // Add a new document with a generated ID
         mFirebaseFirestore.collection(Const.DbCollections.USERS)
@@ -72,21 +71,24 @@ public class RegisterModel implements IRegisterModel {
                     public void onFailure(@NonNull Exception e) {
                         Logger.log("Error adding user: " + e.getCause().getMessage());
                         FirebaseLogger.getInstance(mContext).log("Error adding user: " + e.getCause().getMessage());
+                        mRegisterPresenter.onSignupError("Unable to connect to server");
                     }
                 });
         Logger.exitLog();
     }
 
     @Override
-    public void checkUser(final String phoneNumber) {
+    public void checkLogin(final String username, String password) {
         Logger.entryLog();
-        Logger.log(Log.INFO, "phoneNumber = [" + phoneNumber + "]");
+        Logger.log(Log.INFO, "username = [" + username + "]");
         mFirebaseFirestore.collection(Const.DbCollections.USERS)
-                .whereEqualTo(Const.DbFields.User.PHONE_NUMBER, phoneNumber)
+                .whereEqualTo(Const.DbFields.User.USERNAME, username)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        boolean isLoginSuccess = false;
+                        String errorMessage = "Unable to login";
                         if (task.isSuccessful()) {
                             // Task success
                             QuerySnapshot result = task.getResult();
@@ -95,20 +97,32 @@ public class RegisterModel implements IRegisterModel {
                                 // User registered
                                 DocumentSnapshot documentSnapshot = result.getDocuments().get(0);
                                 User user = PojoBuilder.getUser(documentSnapshot);
-                                SharedPrefs.getInstance(mContext).setUser(user);
-                                mRegisterPresenter.userFound(user);
 
+                                // check password
+                                if (password.equals(
+                                        documentSnapshot.get(Const.DbFields.User.PASSWORD))) {
+                                    // password matched
+                                    isLoginSuccess = true;
+                                    SharedPrefs.getInstance(mContext).setUser(user);
+                                    mRegisterPresenter.onLoginSuccess(user);
+                                    FirebaseLogger.getInstance(mContext).log("Successful login: "
+                                            + username);
+                                } else {
+                                    errorMessage = "Incorrect password";
+                                }
                             } else {
-                                // New user
-                                newUserPhoneNumber = phoneNumber;
-                                mRegisterPresenter.newUser(newUserPhoneNumber);
-                                Logger.log("New user: " + newUserPhoneNumber);
+                                errorMessage = "Username not found";
                             }
                         } else {
                             // Task failed
                             Exception exception = task.getException();
                             Logger.exceptionLog(exception);
-                            mRegisterPresenter.onErrorCheckingUser(exception.getMessage());
+                            errorMessage = "Unable to connect to server";
+                        }
+                        if (!isLoginSuccess) {
+                            mRegisterPresenter.onLoginError(errorMessage);
+                            Logger.log(Log.ERROR, "errorMessage");
+                            FirebaseLogger.getInstance(mContext).log("Error login: " + errorMessage);
                         }
                     }
                 });

@@ -27,8 +27,8 @@ public class Const {
             String STATUS = "status";
         }
         interface User {
-            String NAME = "name";
-            String PHONE_NUMBER = "phonenumber";
+            String USERNAME = "username";
+            String PASSWORD = "passsword";
         }
     }
 

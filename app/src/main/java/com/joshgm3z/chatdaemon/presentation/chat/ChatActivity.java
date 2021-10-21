@@ -63,7 +63,7 @@ public class ChatActivity extends AppCompatActivity implements IChatView, View.O
         mChatPresenter = new ChatPresenter(this, userId);
         String userName;
         try {
-            userName = AppDatabase.getInstance(this).mUserDao().getUser(userId).getName();
+            userName = AppDatabase.getInstance(this).mUserDao().getUser(userId).getUsername();
             initUI(userName);
         } catch (NullPointerException e) {
             Logger.log(Log.ERROR, "e.getMessage()=[" + e.getMessage() + "]");

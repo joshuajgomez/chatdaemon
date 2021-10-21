@@ -27,7 +27,7 @@ public class ChatInfoBuilder {
                 chatType = Const.ChatType.SENT;
             }
             ChatInfo chatInfo = new ChatInfo();
-            chatInfo.setTitle(user.getName());
+            chatInfo.setTitle(user.getUsername());
             chatInfo.setSubTitle(chat.getMessage());
             chatInfo.setUserId(user.getId());
             chatInfo.setChatType(chatType);

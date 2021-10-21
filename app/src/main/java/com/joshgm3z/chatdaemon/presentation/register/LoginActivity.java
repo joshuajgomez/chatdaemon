@@ -18,19 +18,23 @@ import com.joshgm3z.chatdaemon.common.database.entity.User;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 import com.joshgm3z.chatdaemon.presentation.home.HomeActivity;
 import com.joshgm3z.chatdaemon.presentation.register.loading.LoadingFragment;
-import com.joshgm3z.chatdaemon.presentation.register.name.SignupFragment;
-import com.joshgm3z.chatdaemon.presentation.register.phoneNumber.IRegisterFragmentListener;
-import com.joshgm3z.chatdaemon.presentation.register.phoneNumber.LoginFragment;
+import com.joshgm3z.chatdaemon.presentation.register.signup.SignupFragment;
+import com.joshgm3z.chatdaemon.presentation.register.login.IRegisterFragmentListener;
+import com.joshgm3z.chatdaemon.presentation.register.login.LoginFragment;
 import com.joshgm3z.chatdaemon.presentation.register.welcome.IProgressUpdateListener;
 import com.joshgm3z.chatdaemon.presentation.register.welcome.RegisterCompleteFragment;
 
-public class LoginActivity extends AppCompatActivity implements IRegisterView, IRegisterFragmentListener {
+public class LoginActivity extends AppCompatActivity implements IRegisterContract.IRegisterView, IRegisterFragmentListener {
 
     private static final String TAG_LOADING_FRAGMENT = "TAG_LOADING_FRAGMENT";
 
-    private IRegisterPresenter mRegisterPresenter;
+    private IRegisterContract.IRegisterPresenter mRegisterPresenter;
 
     private IProgressUpdateListener mProgressUpdateListener;
+
+    private LoginFragment mLoginFragment;
+
+    SignupFragment mSignupFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +53,9 @@ public class LoginActivity extends AppCompatActivity implements IRegisterView, I
 
     private void showLoginScreen() {
         Logger.entryLog();
-        Fragment loginFragment = LoginFragment.newInstance();
+        mLoginFragment = LoginFragment.newInstance();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_login, loginFragment).commit();
+        fragmentTransaction.add(R.id.fragment_login, mLoginFragment).commit();
         Logger.exitLog();
     }
 
@@ -63,7 +67,7 @@ public class LoginActivity extends AppCompatActivity implements IRegisterView, I
     }
 
     @Override
-    public void onUsernameEntered(String username, String password) {
+    public void onLoginClicked(String username, String password) {
         Logger.entryLog();
         mRegisterPresenter.onLoginClicked(username, password);
         Logger.exitLog();
@@ -72,9 +76,9 @@ public class LoginActivity extends AppCompatActivity implements IRegisterView, I
     @Override
     public void onNewUserClick() {
         Logger.entryLog();
-        Fragment registerNameFragment = SignupFragment.newInstance();
+        mSignupFragment = SignupFragment.newInstance();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_login, registerNameFragment).commit();
+        fragmentTransaction.add(R.id.fragment_login, mSignupFragment).commit();
         Logger.exitLog();
     }
 
@@ -116,8 +120,23 @@ public class LoginActivity extends AppCompatActivity implements IRegisterView, I
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
-                    }})
+                    }
+                })
                 .show();
+    }
+
+    @Override
+    public void showLoginError(String message) {
+        if (mLoginFragment != null) {
+            mLoginFragment.showError(message);
+        }
+    }
+
+    @Override
+    public void showSignupError(String message) {
+        if (mSignupFragment != null) {
+            mSignupFragment.showError(message);
+        }
     }
 
     @Override
@@ -128,16 +147,6 @@ public class LoginActivity extends AppCompatActivity implements IRegisterView, I
         HomeActivity.startActivity(this, user.getId());
         Logger.exitLog();
     }
-
-    @Override
-    public void showRegisterNameScreen(String phoneNumber) {
-        Logger.entryLog();
-        Fragment registerNameFragment = SignupFragment.newInstance();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_login, registerNameFragment).commit();
-        Logger.exitLog();
-    }
-
 
     @Override
     public void showLoadingScreen(String userName) {

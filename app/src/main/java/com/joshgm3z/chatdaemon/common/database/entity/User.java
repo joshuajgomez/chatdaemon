@@ -16,36 +16,24 @@ public class User {
     @ColumnInfo(name = Const.DbFields.ID)
     private String mId;
 
-    @ColumnInfo(name = Const.DbFields.User.NAME)
-    private String mName;
-
-    @ColumnInfo(name = Const.DbFields.User.PHONE_NUMBER)
-    private String mPhoneNumber;
+    @ColumnInfo(name = Const.DbFields.User.USERNAME)
+    private String mUsername;
 
     @Ignore
     public User() {
     }
 
-    public User(String id, String name, String phoneNumber) {
+    public User(String id, String username) {
         mId = id;
-        mName = name;
-        mPhoneNumber = phoneNumber;
+        mUsername = username;
     }
 
-    public String getName() {
-        return mName;
+    public String getUsername() {
+        return mUsername;
     }
 
-    public void setName(String name) {
-        mName = name;
-    }
-
-    public String getPhoneNumber() {
-        return mPhoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        mPhoneNumber = phoneNumber;
+    public void setUsername(String username) {
+        mUsername = username;
     }
 
     public String getId() {
@@ -60,8 +48,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "mId=" + mId +
-                ", mName='" + mName + '\'' +
-                ", mPhoneNumber='" + mPhoneNumber + '\'' +
+                ", mUsername='" + mUsername + '\'' +
                 '}';
     }
 }

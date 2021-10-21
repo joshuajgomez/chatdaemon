@@ -14,8 +14,6 @@ public class SharedPrefs {
 
     private final String USER_NAME = "USER_NAME";
 
-    private final String USER_PHONE_NUMBER = "USER_PHONE_NUMBER";
-
     private static SharedPrefs sInstance;
 
     private SharedPreferences mSharedPref;
@@ -48,8 +46,7 @@ public class SharedPrefs {
         Logger.log(Log.INFO, "user = [" + user + "]");
         SharedPreferences.Editor editor = mSharedPref.edit();
         editor.putString(USER_ID, user.getId());
-        editor.putString(USER_NAME, user.getName());
-        editor.putString(USER_PHONE_NUMBER, user.getPhoneNumber());
+        editor.putString(USER_NAME, user.getUsername());
         editor.apply();
         Logger.log(Log.INFO, "user = [" + user + "]");
     }
@@ -57,8 +54,7 @@ public class SharedPrefs {
     public User getUser() {
         User user = new User();
         user.setId(mSharedPref.getString(USER_ID, ""));
-        user.setName(mSharedPref.getString(USER_NAME, ""));
-        user.setPhoneNumber(mSharedPref.getString(USER_PHONE_NUMBER, ""));
+        user.setUsername(mSharedPref.getString(USER_NAME, ""));
         Logger.log(Log.INFO, "user = [" + user + "]");
         return user;
     }

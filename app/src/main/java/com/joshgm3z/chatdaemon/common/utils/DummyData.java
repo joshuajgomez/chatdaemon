@@ -11,9 +11,9 @@ public class DummyData {
     public List<Chat> getChatList() {
         List<Chat> chatList = new ArrayList<>();
 
-        User sachin = getUser("2", "Sachin", "9237456924");
-        User arun = getUser("3", "Arun", "92378424328");
-        User manu = getUser("4", "Manu", "93238273823");
+        User sachin = getUser("2", "Sachin");
+        User arun = getUser("3", "Arun");
+        User manu = getUser("4", "Manu");
 
         Chat chat1 = getChat("1", null, sachin, "Hey man");
         Chat chat2 = getChat("2", arun, null, "Wassup nigga");
@@ -35,8 +35,8 @@ public class DummyData {
         return new Chat(id, fromUser, toUser, System.currentTimeMillis(), message);
     }
 
-    private User getUser(String id, String name, String phoneNumber) {
-        return new User(id, name, phoneNumber);
+    private User getUser(String id, String username) {
+        return new User(id, username);
     }
 
     public List<Chat> getChatList(String userId) {

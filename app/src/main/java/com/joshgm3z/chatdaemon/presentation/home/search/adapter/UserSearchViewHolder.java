@@ -30,7 +30,7 @@ public class UserSearchViewHolder extends RecyclerView.ViewHolder implements Vie
 
     public void setData(User user) {
         mUser = user;
-        mTvName.setText(user.getName());
+        mTvName.setText(user.getUsername());
     }
 
     @Override

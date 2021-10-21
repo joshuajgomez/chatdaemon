@@ -68,7 +68,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         public void setData(User user) {
             mUser = user;
             Logger.log("user=[" + user + "]");
-            mTextView.setText(user.getName().toString());
+            mTextView.setText(user.getUsername().toString());
         }
 
         @Override

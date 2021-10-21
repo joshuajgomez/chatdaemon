@@ -87,7 +87,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
         }
         User user = SharedPrefs.getInstance(this).getUser();
         if (user != null) {
-            String name = user.getName();
+            String name = user.getUsername();
             mTvAppTitle.setText(name.toString());
         } else {
             Logger.log(Log.ERROR, "name is null");

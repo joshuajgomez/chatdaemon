@@ -6,11 +6,11 @@ import android.util.Log;
 import com.joshgm3z.chatdaemon.common.database.entity.User;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 
-public class RegisterPresenter implements IRegisterPresenter {
+public class RegisterPresenter implements IRegisterContract.IRegisterPresenter {
 
-    private IRegisterView mRegisterView;
+    private IRegisterContract.IRegisterView mRegisterView;
 
-    private IRegisterModel mRegisterModel;
+    private IRegisterContract.IRegisterModel mRegisterModel;
 
     private Context mContext;
 
@@ -18,29 +18,30 @@ public class RegisterPresenter implements IRegisterPresenter {
 
     public RegisterPresenter(LoginActivity activity) {
         Logger.entryLog();
-        mRegisterView = (IRegisterView) activity;
+        mRegisterView = (IRegisterContract.IRegisterView) activity;
         mContext = activity.getApplicationContext();
         mRegisterModel = new RegisterModel(activity.getApplicationContext(), this);
         Logger.exitLog();
     }
 
     @Override
-    public void onAddUserClick(String name, String password) {
+    public void onAddUserClick(String username, String password) {
         Logger.entryLog();
-        mRegisterModel.addUser(name);
+        mRegisterView.showLoadingMask("Signing up");
+        mRegisterModel.addUser(username, password);
         Logger.exitLog();
     }
 
     @Override
     public void onLoginClicked(String phoneNumber, String password) {
         Logger.entryLog();
-        mRegisterModel.checkUser(phoneNumber);
+        mRegisterModel.checkLogin(phoneNumber, password);
         mRegisterView.showLoadingMask("Checking phone number");
         Logger.exitLog();
     }
 
     @Override
-    public void userFound(User user) {
+    public void onLoginSuccess(User user) {
         Logger.entryLog();
         Logger.log(Log.INFO, "user = [" + user + "]");
         mRegisterView.hideLoadingMask();
@@ -49,17 +50,9 @@ public class RegisterPresenter implements IRegisterPresenter {
     }
 
     @Override
-    public void newUser(String phoneNumber) {
-        Logger.entryLog();
-        Logger.log(Log.INFO, "phoneNumber = [" + phoneNumber + "]");
-        mRegisterView.hideLoadingMask();
-        mRegisterView.showRegisterNameScreen(phoneNumber);
-        Logger.exitLog();
-    }
-
-    @Override
     public void onUserAdded(User user) {
         Logger.entryLog();
+        mRegisterView.hideLoadingMask();
         proceedUser(user);
         Logger.exitLog();
     }
@@ -74,15 +67,16 @@ public class RegisterPresenter implements IRegisterPresenter {
     }
 
     @Override
-    public void contactFetchComplete() {
-        mRegisterView.gotoHomeScreen(mUser);
+    public void onLoginError(String message) {
+        Logger.log(Log.INFO, "message = [" + message + "]");
+        mRegisterView.hideLoadingMask();
+        mRegisterView.showLoginError(message);
     }
 
     @Override
-    public void onErrorCheckingUser(String message) {
-        Logger.log(Log.INFO, "message = [" + message + "]");
+    public void onSignupError(String message) {
         mRegisterView.hideLoadingMask();
-        mRegisterView.showErrorMessage(message);
+        mRegisterView.showSignupError(message);
     }
 
 }

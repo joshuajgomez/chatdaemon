@@ -71,7 +71,7 @@ public class UsersFragment extends Fragment implements UsersAdapter.UsersCallbac
     @Override
     public void onClickUser(User user) {
         Logger.entryLog();
-        Logger.log("user.getName()=[" + user.getName() + "]");
+        Logger.log("user.getName()=[" + user.getUsername() + "]");
         mPresenter.onUserClicked(user);
         if (mCallback != null) {
             mCallback.removeUsersFragment();

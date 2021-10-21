@@ -12,7 +12,6 @@ import com.joshgm3z.chatdaemon.common.database.AppDatabase;
 import com.joshgm3z.chatdaemon.common.database.entity.User;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -23,8 +22,7 @@ public class PojoBuilder {
         if (documentSnapshot != null) {
             user = new User();
             user.setId(documentSnapshot.getId());
-            user.setName((String) documentSnapshot.get(Const.DbFields.User.NAME));
-            user.setPhoneNumber((String) documentSnapshot.get(Const.DbFields.User.PHONE_NUMBER));
+            user.setUsername((String) documentSnapshot.get(Const.DbFields.User.USERNAME));
         }
         return user;
     }
@@ -131,10 +129,9 @@ public class PojoBuilder {
     public static List<User> getUserList(List<DocumentSnapshot> documents) {
         List<User> userList = new ArrayList<>();
         for (DocumentSnapshot document : documents) {
-            String name = (String) document.get(Const.DbFields.User.NAME);
-            String phoneNumber = (String) document.get(Const.DbFields.User.PHONE_NUMBER);
+            String username = (String) document.get(Const.DbFields.User.USERNAME);
             String id = document.getId();
-            userList.add(new User(id, name, phoneNumber));
+            userList.add(new User(id, username));
         }
         return userList;
     }
