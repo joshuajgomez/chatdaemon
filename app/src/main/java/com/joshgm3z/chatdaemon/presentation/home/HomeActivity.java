@@ -22,7 +22,6 @@ import com.joshgm3z.chatdaemon.common.utils.SharedPrefs;
 import com.joshgm3z.chatdaemon.presentation.chat.ChatActivity;
 import com.joshgm3z.chatdaemon.presentation.home.adapter.HomeChatAdapter;
 import com.joshgm3z.chatdaemon.presentation.home.adapter.IHomeAdapterCallback;
-import com.joshgm3z.chatdaemon.presentation.home.search.ISearchFragmentCallback;
 import com.joshgm3z.chatdaemon.presentation.register.LoginActivity;
 import com.joshgm3z.chatdaemon.presentation.users.UsersFragment;
 import com.joshgm3z.chatdaemon.service.ChatEngine;
@@ -34,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeAdapterCallback,
-        View.OnClickListener, ISearchFragmentCallback, UsersFragment.UsersFragmentCallback {
+        View.OnClickListener, UsersFragment.UsersFragmentCallback {
 
     @BindView(R.id.rv_home_chat_list)
     RecyclerView mRecyclerView;
@@ -140,11 +139,6 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeA
                 .add(R.id.fl_home, mUsersFragment, TAG_USERS_FRAGMENT)
                 .addToBackStack(null)
                 .commit();
-    }
-
-    @Override
-    public void onUserClick(String userId) {
-        ChatActivity.startActivity(this, userId);
     }
 
     @Override

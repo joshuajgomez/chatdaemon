@@ -66,7 +66,8 @@ public class HomeModel implements IHomeModel, EventListener<QuerySnapshot> {
                     return;
                 }
                 UserDao userDao = AppDatabase.getInstance(mContext).mUserDao();
-                List<User> userList = PojoBuilder.getUserList(value.getDocuments());
+                User currentUser = SharedPrefs.getInstance(mContext).getUser();
+                List<User> userList = PojoBuilder.getUserList(currentUser, value.getDocuments());
                 for (User user : userList) {
                     if (userDao.getUser(user.getId()) == null) {
                         userDao.addUser(user);

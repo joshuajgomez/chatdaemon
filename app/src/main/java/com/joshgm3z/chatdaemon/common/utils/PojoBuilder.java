@@ -126,12 +126,16 @@ public class PojoBuilder {
         return getDateSortedChatList(chatList);
     }
 
-    public static List<User> getUserList(List<DocumentSnapshot> documents) {
+    public static List<User> getUserList(User exclude, List<DocumentSnapshot> documents) {
         List<User> userList = new ArrayList<>();
         for (DocumentSnapshot document : documents) {
             String username = (String) document.get(Const.DbFields.User.USERNAME);
             String id = document.getId();
-            userList.add(new User(id, username));
+            if (!id.equals(exclude.getId())) {
+                userList.add(new User(id, username));
+            } else {
+                // do not add current user to list
+            }
         }
         return userList;
     }

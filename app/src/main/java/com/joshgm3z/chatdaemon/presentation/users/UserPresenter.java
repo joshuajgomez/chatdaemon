@@ -21,7 +21,7 @@ public class UserPresenter implements IUserContract.Presenter {
         mContext = context;
         Logger.entryLog();
         mView = view;
-        mModel = new UserModel(this);
+        mModel = new UserModel(context, this);
         Logger.exitLog();
     }
 

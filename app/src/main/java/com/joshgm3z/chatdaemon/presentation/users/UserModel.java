@@ -15,6 +15,7 @@ import com.joshgm3z.chatdaemon.common.database.AppDatabase;
 import com.joshgm3z.chatdaemon.common.database.entity.User;
 import com.joshgm3z.chatdaemon.common.utils.Logger;
 import com.joshgm3z.chatdaemon.common.utils.PojoBuilder;
+import com.joshgm3z.chatdaemon.common.utils.SharedPrefs;
 
 import java.util.List;
 
@@ -22,9 +23,11 @@ public class UserModel implements IUserContract.Model, OnCompleteListener<QueryS
 
     private FirebaseFirestore mFirebaseFirestore;
     private IUserContract.Presenter mPresenter;
+    private Context mContext;
 
-    public UserModel(IUserContract.Presenter presenter) {
+    public UserModel(Context context, IUserContract.Presenter presenter) {
         Logger.entryLog();
+        mContext = context;
         mPresenter = presenter;
         mFirebaseFirestore = FirebaseFirestore.getInstance();
         Logger.exitLog();
@@ -44,7 +47,8 @@ public class UserModel implements IUserContract.Model, OnCompleteListener<QueryS
         Logger.log("task.getResult().toString()=[" + task.getResult().getMetadata().toString() + "]");
         if (task.isSuccessful()) {
             QuerySnapshot result = task.getResult();
-            List<User> userList = PojoBuilder.getUserList(result.getDocuments());
+            User currentUser = SharedPrefs.getInstance(mContext).getUser();
+            List<User> userList = PojoBuilder.getUserList(currentUser, result.getDocuments());
             Logger.log("userList.size()=[" + userList.size() + "]");
             mPresenter.onUsersReceived(userList);
         } else {
